@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import time
+from sys import exit
 
 import pandas as pd
 import psycopg2
@@ -313,10 +314,10 @@ class PostgresConnection(DatabaseConnection):
             logger.debug('Query executed succesfully')
 
         except (Exception, psycopg2.DatabaseError) as e:
+            print(e)
             logger.error(e)
             self.connection.rollback()
             self.cursor.close()
-            exit(1)
 
         self.cursor.close()
         logger.debug('Insert succesful.')

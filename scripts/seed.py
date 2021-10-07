@@ -62,8 +62,9 @@ def create_tables():
         (
             id serial primary key,
             name varchar(31),
-            abbreviation varchar(7),
-            description varchar(511)
+            abbreviation varchar(7) unique,
+            description text,
+            icon varchar(127)
         );
     """
     with PostgresConnection() as pg:

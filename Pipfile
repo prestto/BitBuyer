@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 pandas = "*"
 psycopg2-binary = "*"
+bs4 = "*"
+ipykernel = "*"
+requests = "*"
 
 [dev-packages]
 
