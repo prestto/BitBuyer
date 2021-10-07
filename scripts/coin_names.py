@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from modules.db import PostgresConnection
 
 COL_ORDER = [
+    'id',
     'name',
     'abbreviation',
     'description',
@@ -56,6 +57,9 @@ class CoinParser:
         full = f"{base_url}{url.lstrip('/')}"
         return full
 
+    def get_id(self):
+        return self.soup.select('.etpvrL')[0].text 
+
     def get_description(self):
         # get description html
         url = self.get_detail_url()
@@ -75,6 +79,7 @@ class CoinParser:
 
     def get_dict(self):
         return {
+            'id': self.get_id(),
             'name': self.get_name(),
             'abbreviation': self.get_abbreviation(),
             'icon': str(self.get_local_path().resolve()),
@@ -87,7 +92,7 @@ class CoinListParser:
         self.soup = BeautifulSoup(html, 'html.parser')
 
     def get_list(self):
-        return self.soup.select('.escjiH')
+        return self.soup.select('tbody')[0].select('tr')
 
 
 def main():
