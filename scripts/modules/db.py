@@ -311,6 +311,7 @@ class PostgresConnection(DatabaseConnection):
         try:
             logger.debug('Running insert statement.')
             execute_values(self.cursor, query, data)
+            rowcount = self.cursor.rowcount
             self.connection.commit()
             logger.debug('Query executed succesfully')
 
@@ -322,6 +323,7 @@ class PostgresConnection(DatabaseConnection):
 
         self.cursor.close()
         logger.debug('Insert succesful.')
+        return rowcount
 
     def upsert(self, table, columns, rows, on_conflict_names):
         """
