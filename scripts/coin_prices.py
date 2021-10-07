@@ -197,7 +197,7 @@ def main():
             print('Request status: 200')
             # format the list
             results_processor = ResultsProcessor(coin_id, response_dict)
-            results_processor.parsed_results()
+            results_processor.parse_list()
             print(f'Formatted {len(results_processor.parsed_results)} results')
 
             results_processor.insert_results_db()
