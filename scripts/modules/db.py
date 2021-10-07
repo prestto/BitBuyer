@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import time
+from pathlib import Path
 from sys import exit
 
 import pandas as pd
@@ -442,4 +443,18 @@ class PostgresConnection(DatabaseConnection):
         self.cursor = self.connection.cursor()
         logger.debug(f'Running copy expert; query: {query}')
         self.cursor.copy_expert(query, io)
+        self.cursor.close()
+
+    def copy_from(self, path: Path, table_name: str):
+        self.cursor = self.connection.cursor()
+        with open(path, 'r') as f:
+            self.cursor.copy_expert(f"""COPY {table_name} FROM STDIN WITH CSV HEADER DELIMITER E'\t';""", f)
+        self.connection.commit()
+        self.cursor.close()
+    
+    def copy_to(self, path: Path, table_name: str):
+        self.cursor = self.connection.cursor()
+        with open(path, 'wb') as f:
+            self.cursor.copy_expert(f"""COPY {table_name} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
+        self.connection.commit()
         self.cursor.close()
