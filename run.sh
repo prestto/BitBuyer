@@ -49,6 +49,12 @@ function run_dump {
     cecho "BL" "Dump complete."
 }
 
+function run_scrape {
+    cecho "BL" "Scraping..."
+    pipenv run python ./scripts/coin_names.py
+    cecho "BL" "Scrape complete."
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -57,6 +63,7 @@ function show_help {
     cecho "BL" "   * seed                           - Run db seeding."
     cecho "BL" "   * reset                          - Run db reset."
     cecho "BL" "   * dump                           - Run db dump."
+    cecho "BL" "   * scrape                         - Scrape coins page."
 }
 
 if [[ "$1" == "" ]]; then
@@ -77,6 +84,9 @@ reset)
     ;;
 dump)
     run_dump
+    ;;
+scrape)
+    run_scrape
     ;;
 *)
     show_help
