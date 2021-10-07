@@ -88,12 +88,7 @@ query_params = {
     'expansions': 'author_id',
     'user.fields': 'description',
     'start_time': format_dt(start_datetime),
-    'end_time': format_dt(end_datetimit API requires to help prevent CSRF. Modhashes can be obtained via the /api/me.json call or in response data of listing endpoints.
-
-The preferred way to send a modhash is to include an X-Modhash custom HTTP header with your requests.
-
-Modhashes are not required when authenticated with OAuth.
-fullnamese)
+    'end_time': format_dt(end_datetime)
 }
 
 def bearer_oauth(r):
