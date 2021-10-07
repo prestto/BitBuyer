@@ -43,6 +43,12 @@ function run_reset {
     cecho "BL" "Reset complete."
 }
 
+function run_dump {
+    cecho "BL" "Dumping..."
+    pipenv run python ./scripts/dump.py
+    cecho "BL" "Dump complete."
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -50,6 +56,7 @@ function show_help {
     cecho "BL" "   * dev                            - Run tilt up."
     cecho "BL" "   * seed                           - Run db seeding."
     cecho "BL" "   * reset                          - Run db reset."
+    cecho "BL" "   * dump                           - Run db dump."
 }
 
 if [[ "$1" == "" ]]; then
@@ -67,6 +74,9 @@ seed)
     ;;
 reset)
     run_reset
+    ;;
+dump)
+    run_dump
     ;;
 *)
     show_help

@@ -2,7 +2,7 @@
 Truncate all tables
 """
 
-from db import PostgresConnection
+from modules.db import PostgresConnection
 
 
 
@@ -17,9 +17,9 @@ def main():
     ]
 
     for table in tables:
-        print(f'Truncating: {table}')
+        print(f'Dropping: {table}')
         with  PostgresConnection() as pg:
-            pg.execute(f"TRUNCATE {table}")
+            pg.execute(f"DROP TABLE IF EXISTS {table} CASCADE;")
 
 if __name__ == "__main__":
     main()

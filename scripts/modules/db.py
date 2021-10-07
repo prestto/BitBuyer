@@ -446,6 +446,7 @@ class PostgresConnection(DatabaseConnection):
         self.cursor.close()
 
     def copy_from(self, path: Path, table_name: str):
+        """Copy from tsv file => db table"""
         self.cursor = self.connection.cursor()
         with open(path, 'r') as f:
             self.cursor.copy_expert(f"""COPY {table_name} FROM STDIN WITH CSV HEADER DELIMITER E'\t';""", f)
@@ -453,6 +454,7 @@ class PostgresConnection(DatabaseConnection):
         self.cursor.close()
     
     def copy_to(self, path: Path, table_name: str):
+        """Copy from db table => tsv file"""
         self.cursor = self.connection.cursor()
         with open(path, 'wb') as f:
             self.cursor.copy_expert(f"""COPY {table_name} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
