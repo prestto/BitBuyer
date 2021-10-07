@@ -50,8 +50,15 @@ function run_dump {
 }
 
 function run_scrape {
-    cecho "BL" "Scraping..."
-    pipenv run python ./scripts/coin_names.py
+
+    if [[ "$1" = "" ]]; then
+            TABLE="coins"
+    else
+            TABLE=$1
+    fi
+
+    cecho "BL" "Scraping $TABLE..."
+    pipenv run python ./scripts/$TABLE.py
     cecho "BL" "Scrape complete."
 }
 
@@ -63,7 +70,9 @@ function show_help {
     cecho "BL" "   * seed                           - Run db seeding."
     cecho "BL" "   * reset                          - Run db reset."
     cecho "BL" "   * dump                           - Run db dump."
-    cecho "BL" "   * scrape                         - Scrape coins page."
+    cecho "BL" "   * scrape <table>                 - Scrape a data for a table."
+    cecho "BL" "   *         coins                  - Scrape coins table."
+    cecho "BL" "   *         coin_prices            - Scrape coin prices."
 }
 
 if [[ "$1" == "" ]]; then
@@ -86,7 +95,7 @@ dump)
     run_dump
     ;;
 scrape)
-    run_scrape
+    run_scrape $2
     ;;
 *)
     show_help
