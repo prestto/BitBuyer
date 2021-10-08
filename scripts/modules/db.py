@@ -4,6 +4,7 @@ import os
 import time
 from pathlib import Path
 from sys import exit
+from typing import List, Tuple
 
 import pandas as pd
 import psycopg2
@@ -238,7 +239,14 @@ class PostgresConnection(DatabaseConnection):
         )
         super().__init__(**kwargs)
 
-    def _results_to_dict(self, results):
+    def _result_to_dict(self, result: Tuple[str], columns: list) -> dict:
+        row_dict = {}
+        for i, col in enumerate(columns):
+            row_dict[col.name] = result[i]
+        
+        return row_dict
+
+    def _results_to_dict(self, results: List[tuple]):
         """
         Convert result from fetchmany in the form of a list of tuples to
         a list of dicts
@@ -248,10 +256,7 @@ class PostgresConnection(DatabaseConnection):
         # make dict
         dict_results = []
         for row in results:
-            row_dict = {}
-            for i, col in enumerate(columns):
-                row_dict[col.name] = row[i]
-            dict_results.append(row_dict)
+            dict_results.append(self._result_to_dict(row, columns))
 
         return dict_results
 
@@ -316,10 +321,10 @@ class PostgresConnection(DatabaseConnection):
             logger.debug('Query executed succesfully')
 
         except (Exception, psycopg2.DatabaseError) as e:
-            print(e)
             logger.error(e)
             self.connection.rollback()
             self.cursor.close()
+            raise e
 
         self.cursor.close()
         logger.debug('Insert succesful.')
@@ -462,3 +467,23 @@ class PostgresConnection(DatabaseConnection):
             self.cursor.copy_expert(f"""COPY {table_name} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
         self.connection.commit()
         self.cursor.close()
+
+    def select_one(self, query) -> dict:
+        """return only one row from df as dict"""
+        self.cursor = self.connection.cursor()
+        logger.debug('Db connection succesful')
+
+        try:
+
+            self.cursor.execute(query)
+            r = self.cursor.fetchone()
+            columns = self.cursor.description
+            logger.debug('Query executed succesfully')
+
+        except (Exception, psycopg2.DatabaseError) as e:
+            logger.error(e)
+            self.cursor.close()
+            exit(1)
+
+        self.cursor.close()
+        return self._result_to_dict(r, columns)
