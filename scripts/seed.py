@@ -2,7 +2,9 @@
 Create tables for the tweets and prices
 """
 
-from db import PostgresConnection
+from pathlib import Path
+
+from modules.db import PostgresConnection
 
 
 def create_tables():
@@ -62,8 +64,9 @@ def create_tables():
         (
             id serial primary key,
             name varchar(31),
-            abbreviation varchar(7),
-            description varchar(511)
+            abbreviation varchar(7) unique,
+            description text,
+            icon varchar(127)
         );
     """
     with PostgresConnection() as pg:
@@ -94,13 +97,9 @@ def create_tables():
 
 
 def seed_tables():
-    print('Seeding table: twitter_users')
-    query = """
-        insert into twitter_users (author, name, username, description)
-        values (123, 'tom', 'usertom', 'champion')
-    """
+    print('Seeding table: coins')
     with PostgresConnection() as pg:
-        pg.execute(query)
+        pg.copy_from(Path('./resources/coins.tsv'), 'coins')
 
 
 def main():

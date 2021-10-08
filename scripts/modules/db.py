@@ -2,6 +2,8 @@ import json
 import logging
 import os
 import time
+from pathlib import Path
+from sys import exit
 
 import pandas as pd
 import psycopg2
@@ -309,17 +311,19 @@ class PostgresConnection(DatabaseConnection):
         try:
             logger.debug('Running insert statement.')
             execute_values(self.cursor, query, data)
+            rowcount = self.cursor.rowcount
             self.connection.commit()
             logger.debug('Query executed succesfully')
 
         except (Exception, psycopg2.DatabaseError) as e:
+            print(e)
             logger.error(e)
             self.connection.rollback()
             self.cursor.close()
-            exit(1)
 
         self.cursor.close()
         logger.debug('Insert succesful.')
+        return rowcount
 
     def upsert(self, table, columns, rows, on_conflict_names):
         """
@@ -441,4 +445,20 @@ class PostgresConnection(DatabaseConnection):
         self.cursor = self.connection.cursor()
         logger.debug(f'Running copy expert; query: {query}')
         self.cursor.copy_expert(query, io)
+        self.cursor.close()
+
+    def copy_from(self, path: Path, table_name: str):
+        """Copy from tsv file => db table"""
+        self.cursor = self.connection.cursor()
+        with open(path, 'r') as f:
+            self.cursor.copy_expert(f"""COPY {table_name} FROM STDIN WITH CSV HEADER DELIMITER E'\t';""", f)
+        self.connection.commit()
+        self.cursor.close()
+    
+    def copy_to(self, path: Path, table_name: str):
+        """Copy from db table => tsv file"""
+        self.cursor = self.connection.cursor()
+        with open(path, 'wb') as f:
+            self.cursor.copy_expert(f"""COPY {table_name} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
+        self.connection.commit()
         self.cursor.close()

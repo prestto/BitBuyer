@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitbuyer-api
+  labels:
+    app: bitbuyer-api
+spec:
+  selector:
+    matchLabels:
+      app: bitbuyer-api
+  template:
+    metadata:
+      labels:
+        app: bitbuyer-api
+    spec:
+      containers:
+        - name: bitbuyer-api
+          image: user632716/bitbuyer:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: POSTGRES_PASSWORD
+              value: pgpassword
+            - name: POSTGRES_HOST
+              value: postgres-external
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: postgres
+            - name: ENV
+              value: DEV

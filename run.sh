@@ -43,6 +43,56 @@ function run_reset {
     cecho "BL" "Reset complete."
 }
 
+function run_dump {
+    cecho "BL" "Dumping..."
+    pipenv run python ./scripts/dump.py
+    cecho "BL" "Dump complete."
+}
+
+function run_scrape {
+
+    if [[ "$1" = "" ]]; then
+            TABLE="coins"
+    else
+            TABLE=$1
+    fi
+
+    cecho "BL" "Scraping $TABLE..."
+    pipenv run python ./scripts/$TABLE.py
+    cecho "BL" "Scrape complete."
+}
+
+function run_tag {
+    if [[ $1 = "" ]]; then
+        TAG="latest"
+    else
+        TAG=$1
+    fi
+    cecho "BL" "Building with tag: $TAG..."
+    docker build --file docker/Dockerfile-bitbuyer --tag user632716/bitbuyer:$TAG .
+    cecho "BL" "Built."
+}
+
+function run_push {
+    cecho "BL" "Pushing user632716/bitbuyer:latest..."
+    docker push user632716/bitbuyer:latest
+    cecho "BL" "Pushed."
+}
+
+function run_migrate {
+    cecho "BL" "Migrating..."
+    kubectl exec deploy/bitbuyer-api -- python manage.py migrate
+    kubectl exec deploy/bitbuyer-api -- python manage.py migrate coins
+    cecho "BL" "Migrated."
+}
+
+function run_makemigrations {
+    cecho "BL" "Making migrations..."
+    kubectl exec deploy/bitbuyer-api -- python manage.py makemigrations common
+    kubectl exec deploy/bitbuyer-api -- python manage.py makemigrations coins
+    cecho "BL" "Migrations made."
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -50,6 +100,14 @@ function show_help {
     cecho "BL" "   * dev                            - Run tilt up."
     cecho "BL" "   * seed                           - Run db seeding."
     cecho "BL" "   * reset                          - Run db reset."
+    cecho "BL" "   * dump                           - Run db dump."
+    cecho "BL" "   * scrape <table>                 - Scrape a data for a table."
+    cecho "BL" "   *         coins                  - Scrape coins table."
+    cecho "BL" "   *         coin_prices            - Scrape coin prices."
+    cecho "BL" "   * tag <table>                    - Build & tag the docker image."
+    cecho "BL" "   * push                           - Push user632716/bitbuyer:latest."
+    cecho "BL" "   * migrate                        - Migrate the db."
+    cecho "BL" "   * makemigrations                 - Make db migrations."
 }
 
 if [[ "$1" == "" ]]; then
@@ -67,6 +125,24 @@ seed)
     ;;
 reset)
     run_reset
+    ;;
+dump)
+    run_dump
+    ;;
+scrape)
+    run_scrape $2
+    ;;
+tag)
+    run_tag $2
+    ;;
+push)
+    run_push
+    ;;
+migrate)
+    run_migrate
+    ;;
+makemigrations)
+    run_makemigrations
     ;;
 *)
     show_help
