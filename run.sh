@@ -62,6 +62,23 @@ function run_scrape {
     cecho "BL" "Scrape complete."
 }
 
+function run_tag {
+    if [[ $1 = "" ]]; then
+        TAG="latest"
+    else
+        TAG=$1
+    fi
+    cecho "BL" "Building with tag: $TAG..."
+    docker build --file docker/Dockerfile-bitbuyer --tag user632716/bitbuyer:$TAG .
+    cecho "BL" "Built."
+}
+
+function run_push {
+    cecho "BL" "Pushing user632716/bitbuyer:latest..."
+    docker push user632716/bitbuyer:latest
+    cecho "BL" "Pushed."
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -73,6 +90,8 @@ function show_help {
     cecho "BL" "   * scrape <table>                 - Scrape a data for a table."
     cecho "BL" "   *         coins                  - Scrape coins table."
     cecho "BL" "   *         coin_prices            - Scrape coin prices."
+    cecho "BL" "   * tag <table>                    - Build & tag the docker image."
+    cecho "BL" "   * push                           - Push user632716/bitbuyer:latest."
 }
 
 if [[ "$1" == "" ]]; then
@@ -96,6 +115,12 @@ dump)
     ;;
 scrape)
     run_scrape $2
+    ;;
+tag)
+    run_tag $2
+    ;;
+push)
+    run_push
     ;;
 *)
     show_help
