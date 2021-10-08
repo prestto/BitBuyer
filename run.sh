@@ -79,6 +79,20 @@ function run_push {
     cecho "BL" "Pushed."
 }
 
+function run_migrate {
+    cecho "BL" "Migrating..."
+    kubectl exec deploy/bitbuyer-api -- python manage.py migrate
+    kubectl exec deploy/bitbuyer-api -- python manage.py migrate coins
+    cecho "BL" "Migrated."
+}
+
+function run_makemigrations {
+    cecho "BL" "Making migrations..."
+    kubectl exec deploy/bitbuyer-api -- python manage.py makemigrations common
+    kubectl exec deploy/bitbuyer-api -- python manage.py makemigrations coins
+    cecho "BL" "Migrations made."
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -92,6 +106,8 @@ function show_help {
     cecho "BL" "   *         coin_prices            - Scrape coin prices."
     cecho "BL" "   * tag <table>                    - Build & tag the docker image."
     cecho "BL" "   * push                           - Push user632716/bitbuyer:latest."
+    cecho "BL" "   * migrate                        - Migrate the db."
+    cecho "BL" "   * makemigrations                 - Make db migrations."
 }
 
 if [[ "$1" == "" ]]; then
@@ -121,6 +137,12 @@ tag)
     ;;
 push)
     run_push
+    ;;
+migrate)
+    run_migrate
+    ;;
+makemigrations)
+    run_makemigrations
     ;;
 *)
     show_help
