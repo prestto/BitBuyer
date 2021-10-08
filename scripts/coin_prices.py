@@ -42,8 +42,7 @@ class RequestFactory:
         return {'X-CoinAPI-Key': COIN_API_KEY}
 
     def query(self, abbreviation: str, time_start: datetime = datetime.fromisoformat("2016-01-01T00:00:00"), time_end: datetime = datetime.now()):
-        print(
-            f'Requesting: {abbreviation}, {time_start}, {time_end}, {self.currency}, {self.period}, {self.limit}')
+        print(f'Requesting: {abbreviation}, {time_start}, {time_end}, {self.currency}, {self.period}, {self.limit}')
         r = self.get_request(abbreviation, time_start, time_end)
         return requests.get(r, headers=self.get_header())
 
@@ -181,6 +180,7 @@ def main():
 
         # if the most recent results aren't older than 1 day, continue
         if history.end and history.end > datetime.now(tz=timezone.utc) - timedelta(days=1):
+            print(f'History.end = {history.end} for {coin_to_process} moving onto next coin.')
             continue
 
         if history.end:
@@ -203,8 +203,7 @@ def main():
             results_processor.insert_results_db()
             print(f'Inserted {results_processor.rows_inserted} rows.')
         else:
-            print(
-                f'Request failed with status: {result.status_code} message: {result.text}')
+            print(f'Request failed with status: {result.status_code} message: {result.text}')
             exit(1)
 
 
