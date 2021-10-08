@@ -2,5 +2,4 @@ from rest_framework import serializers
 
 
 class CoinSerializer(serializers.Serializer):
-    class Meta:
-        fields = ['name',]
+    name = serializers.CharField(max_length=200)
