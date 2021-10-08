@@ -10,6 +10,7 @@ bs4 = "*"
 ipykernel = "*"
 requests = "*"
 django = "*"
+djangorestframework = "*"
 
 [dev-packages]
 
