@@ -9,8 +9,9 @@ psycopg2-binary = "*"
 bs4 = "*"
 ipykernel = "*"
 requests = "*"
+django = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"

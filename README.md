@@ -12,6 +12,14 @@ Lets look at news outlets then, specifically twitter.  We've taken 16M tweets an
 
 Bitbuyer is tested on an ubuntu system.  The following dependencies are required:
 
+- [python 3.10](https://github.com/deadsnakes/python3.10)
+
+```bash
+sudo add-apt-repository --yes ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install -y python3.10 python3.10-dev python3.10-distutils libpq-dev
+```
+
 - [pipenv](https://pipenv.pypa.io/en/latest/#install-pipenv-today)
 
 ```bash
