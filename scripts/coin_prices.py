@@ -196,7 +196,7 @@ def main():
             if history.end:
                 # query the coinapi endpoint to get results since last present result
                 print(f'History present from {history.start} to {history.end}')
-                result = RequestFactory().query(coin_to_process, time_end=history.end)
+                result = RequestFactory().query(coin_to_process, time_start=history.end)
             else:
                 # get results since default start time
                 print('No history found')
