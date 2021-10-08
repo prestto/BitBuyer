@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ENV = os.environ.get('ENVIRONMENT', 'PROD')
+ENV = os.environ.get('ENV', 'PROD')
 
 # default to debug = False
 DEBUG = False
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'common',
     'coins',
 ]
 

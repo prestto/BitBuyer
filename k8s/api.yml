@@ -34,3 +34,5 @@ spec:
               value: "5432"
             - name: POSTGRES_USER
               value: postgres
+            - name: ENV
+              value: DEV
