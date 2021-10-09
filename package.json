@@ -1,0 +1,22 @@
+{
+  "name": "bitbuyer",
+  "version": "1.0.0",
+  "description": "## Intro",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prestto/BitBuyer.git"
+  },
+  "author": "Tom Preston",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prestto/BitBuyer/issues"
+  },
+  "homepage": "https://github.com/prestto/BitBuyer#readme"
+}

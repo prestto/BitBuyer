@@ -70,6 +70,12 @@ curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/instal
 curl -sS https://webinstall.dev/k9s | bash
 ```
 
+- [angular](https://angular.io/guide/setup-local#install-the-angular-cli)
+
+```bash
+npm install -g @angular/cli
+```
+
 ## Dev
 
 Dev is handled in tilt.
