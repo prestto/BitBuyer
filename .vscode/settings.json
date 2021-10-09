@@ -1,0 +1,49 @@
+{
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[typescript]": {
+        "editor.tabSize": 2
+    },
+    "[yaml]": {
+        "editor.tabSize": 2
+    },
+    "[markdown]": {
+        "editor.tabSize": 2
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "editor.detectIndentation": false,
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "eslint.options": {
+        "configFile": "str(eslintrc_json)",
+        "useEslintrc": true
+    },
+    "eslint.run": "onSave",
+    "eslint.validate": [
+        "javascript",
+        "html"
+    ],
+    "files.associations": {
+        "[Dd]ockerfile*": "dockerfile",
+        "docker-compose*": "yaml",
+        "Tiltfile*": "python"
+    },
+    "[html]": {
+        "editor.tabSize": 4
+    },
+    "python.formatting.autopep8Args": [
+        "--max-line-length=120"
+    ],
+    "python.formatting.provider": "autopep8",
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.pycodestyleArgs": [
+        "--max-line-length=120"
+    ],
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pylintEnabled": false
+}
