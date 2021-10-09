@@ -100,6 +100,10 @@ def seed_tables():
     print('Seeding table: coins')
     with PostgresConnection() as pg:
         pg.copy_from(Path('./resources/coins.tsv'), 'coins')
+    print('Seeding table: coin_prices')
+    with PostgresConnection() as pg:
+        pg.copy_from(Path('./resources/coin_prices.tsv'), 'coin_prices')
+    
 
 
 def main():
