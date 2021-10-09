@@ -2,10 +2,13 @@
 Run api calls for coins
 
 Config: ./config/coin_prices.json
+
+To run:
+./run.sh scrape coin_prices
 """
 import json
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, time
 from pathlib import Path
 from sys import exit
 from typing import List, Tuple
@@ -28,7 +31,7 @@ class RequestFactory:
     - 1000 requests per day with no limit
     - per 100 data points returned
     """
-
+    time_format = '%Y-%m-%dT%H:%M:%S'
     def __init__(self, currency: str = 'USD', period: str = '1DAY', limit: int = 100):
         self.currency = currency
         self.period = period
@@ -40,15 +43,23 @@ class RequestFactory:
     def get_header(self):
         return {'X-CoinAPI-Key': COIN_API_KEY}
 
-    def format_datetime(self, dt):
+    def format_datetime(self, dt, force_time: str=None):
         if not isinstance(dt, datetime):
             raise TypeError(f'Datetime should be a datetime not: {type(dt)}')
 
-        return dt.strftime('%Y-%m-%dT%H:%M:%S')
+        if force_time and force_time not in ['start', 'end']:
+            raise ValueError(f'force_time must be either "start" or "end", not {force_time}')
+
+        if force_time == 'start':
+            return datetime.combine(dt.date(), time.min).strftime(self.time_format)
+        elif force_time == 'end':
+            return datetime.combine(dt.date(), time.max).strftime(self.time_format)
+        else:
+            return dt.strftime(self.time_format) 
 
     def query(self, abbreviation: str, time_start: datetime = datetime.fromisoformat("2016-01-01T00:00:00"), time_end: datetime = datetime.now()):
-        time_start = self.format_datetime(time_start)
-        time_end = self.format_datetime(time_end)
+        time_start = self.format_datetime(time_start, 'start')
+        time_end = self.format_datetime(time_end, 'end')
         print(f'Requesting: {abbreviation}, {time_start}, {time_end}, {self.currency}, {self.period}, {self.limit}')
         r = self.get_request(abbreviation, time_start, time_end)
         return requests.get(r, headers=self.get_header())
@@ -191,7 +202,7 @@ def main():
             # if the most recent results aren't older than 1 day, continue
             if history.end and history.end > datetime.now(tz=timezone.utc) - timedelta(days=1):
                 print(f'History.end = {history.end} for {coin_to_process} moving onto next coin.')
-                continue
+                break
 
             if history.end:
                 # query the coinapi endpoint to get results since last present result

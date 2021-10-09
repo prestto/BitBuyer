@@ -7,7 +7,8 @@ from pathlib import Path
 from modules.db import PostgresConnection
 
 TO_DUMP = [
-    'coins'
+    'coins',
+    'coin_prices'
 ]
 RESOURCE_PATH = Path('./resources')
 
@@ -16,6 +17,7 @@ def main():
     # dump all tables
     for table in TO_DUMP:
         # define path to dump to
+        print(f'Dumping table: {table}')
         path = RESOURCE_PATH.joinpath(f'{table}.tsv')
         # dump
         with PostgresConnection() as pg:
