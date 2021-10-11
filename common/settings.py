@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'django_extensions',
     'common',
     'coins',
 ]
@@ -69,6 +70,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if ENV == 'DEV':
+    MIDDLEWARE.append('coins.middleware.DebugLogMiddleware')
 
 ROOT_URLCONF = 'common.urls'
 
