@@ -5,7 +5,8 @@
 export const environment = {
   name: 'dev',
   production: false,
-  apiUrl: 'http://localhost:8000'
+  // apiUrl: 'http://bitbuyer-api'
+  apiUrl: 'http://127.0.0.1:8000'
 };
 
 /*
