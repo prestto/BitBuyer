@@ -27,15 +27,22 @@ ENV = os.environ.get('ENV', 'PROD')
 
 # default to debug = False
 DEBUG = False
-if not ENV == 'PROD':
+if ENV == 'DEV':
     DEBUG = True
 
 ALLOWED_HOSTS = []
-
+# CORS_ORIGIN_WHITELIST = []
 if ENV == 'PROD':
     ALLOWED_HOSTS.append('*.tom-preston.co.uk')
+    # CORS_ORIGIN_WHITELIST.append('') # TODO
 if ENV == 'DEV':
     ALLOWED_HOSTS.append('*')
+    CORS_ALLOW_ALL_ORIGINS = True
+    # CORS_ORIGIN_WHITELIST.append('bitbuyer-front')
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
+]
 
 # Application definition
 
@@ -47,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'common',
     'coins',
 ]
@@ -54,6 +62,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
