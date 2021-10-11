@@ -9,6 +9,7 @@ const routes: Routes = [
     path: 'coins',
     component: ListComponent,
   },
+  { path: '', redirectTo: 'coins', pathMatch: 'full' },
 ];
 
 @NgModule({
