@@ -12,6 +12,7 @@ requests = "*"
 django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+django-extensions = "*"
 
 [dev-packages]
 autopep8 = "*"
