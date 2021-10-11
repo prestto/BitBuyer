@@ -1,0 +1,23 @@
+<table mat-table [dataSource]="coinsDataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> id </th>
+        <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icon">
+        <th mat-header-cell *matHeaderCellDef>Name </th>
+        <td mat-cell *matCellDef="let element"> <img class="icon" src="{{ element.icon }}" alt=""> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name" class="name-group">
+        <th mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let element">
+            <span class="coin-name">{{ element.name }}</span>
+            <span class="coin-abbreviation">({{ element.abbreviation }})</span>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
