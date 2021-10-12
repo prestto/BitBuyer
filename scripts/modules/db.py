@@ -384,15 +384,17 @@ class PostgresConnection(DatabaseConnection):
         try:
             logger.debug('Running query.')
             self.cursor.execute(query)
+            rowcount = self.cursor.rowcount
             self.connection.commit()
             logger.debug('Query executed succesfully')
         except (Exception, psycopg2.DatabaseError) as e:
             logger.error('execute error : {}'.format(e))
             self.connection.rollback()
             self.cursor.close()
-            exit(1)
+            raise e
 
         self.cursor.close()
+        return rowcount
 
     def select(self, query, data=(), limit=0):
         """
