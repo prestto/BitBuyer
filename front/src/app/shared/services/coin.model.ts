@@ -12,7 +12,7 @@ export interface Coin {
   abbreviation: string;
   icon: string;
   description: string;
-  price_history: PricePoint[];
+  coinprices_set: PricePoint[];
 }
 
 export interface CoinResponse {
