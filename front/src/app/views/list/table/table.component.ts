@@ -92,16 +92,12 @@ export class TableComponent implements OnInit {
   }
 
   formatCurrentPrice(currentPrice: CurrentPrices) {
-    let startPrice = currentPrice.rate_open
-    let endPrice = currentPrice.rate_close
-    console.log(`open: ${currentPrice.rate_open} -- close: ${currentPrice.rate_close}`)
-    let change = this.round(100 - (startPrice / endPrice) * 100, 2)
+    let change = this.round(100 - (currentPrice.rate_open / currentPrice.rate_close) * 100, 2)
     let fcp: FormattedCurrentPrice = {
       change: `${change}%`,
-      current: this.round(endPrice, 4),
+      current: this.round(currentPrice.rate_close, 4),
       date: currentPrice.time_period_end
     }
-    console.log(fcp)
     return fcp
   };
 
@@ -139,6 +135,7 @@ export class TableComponent implements OnInit {
     },
     tooltips: {
       enabled: false
+      // position: "nearest"
     },
     scales: {
       y: {
