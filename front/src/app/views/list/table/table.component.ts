@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { Coin, PricePoint } from '../../../shared/services/coin.model';
+import { Coin, CurrentPrices } from '../../../shared/services/coin.model';
 import { CoinsService } from '../../../shared/services/coins.service';
 import { formatDate } from '@angular/common';
 
@@ -13,6 +13,12 @@ export interface TableChart {
   color: Color[];
 }
 
+export interface FormattedCurrentPrice {
+  change: number;
+  current: number;
+  date: Date;
+}
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -20,12 +26,14 @@ export interface TableChart {
   providers: [CoinsService]
 })
 export class TableComponent implements OnInit {
-  displayedColumns = ['id', 'icon', 'name', 'graph']
+  displayedColumns = ['id', 'icon', 'name', 'close', 'change', 'graph']
   coinsDataSource = coinsDataSource;
   labels: any[] = [];
   points: any[] = [];
   testObj: any;
-  public allCharts: any = {}
+  public allCharts: any = {};
+  public currentPrices: any = {};
+
   constructor(
     private service: CoinsService
   ) {
@@ -78,15 +86,41 @@ export class TableComponent implements OnInit {
     return tc
   }
 
+  round(num: number, dp: number) {
+    let multiple: number = dp * 10
+    return Math.round(num * multiple) / multiple
+  }
+
+  formatCurrentPrice(currentPrice: CurrentPrices) {
+    console.log(currentPrice)
+    let startPrice = currentPrice.rate_open
+    let endPrice = currentPrice.rate_close
+    let change = this.round((startPrice / endPrice) * 100, 2)
+    let fcp: FormattedCurrentPrice = {
+      change: change,
+      current: this.round(endPrice, 2),
+      date: currentPrice.time_period_end
+    }
+    console.log(fcp)
+    return fcp
+  };
+
   ngOnInit(): void {
     this.service.getCoins()
       .subscribe(
         coinResponse => {
 
           for (let coin of coinResponse.results) {
+
             // get the chart params in an accesible format
             let tableChart = this.formatCoinHostory(coin)
             this.allCharts[coin.abbreviation] = tableChart
+
+            // price change
+            if (coin.currentprices) {
+              let currentPrice: FormattedCurrentPrice = this.formatCurrentPrice(coin.currentprices)
+              this.currentPrices[coin.abbreviation] = currentPrice
+            }
           }
           this.coinsDataSource = coinResponse.results
         }

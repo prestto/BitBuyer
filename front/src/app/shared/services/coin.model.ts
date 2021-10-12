@@ -13,6 +13,14 @@ export interface Coin {
   icon: string;
   description: string;
   coinprices_set: PricePoint[];
+  currentprices: CurrentPrices;
+}
+
+export interface CurrentPrices {
+  coin_id: number
+  rate_close: number
+  rate_open: number
+  time_period_end: Date
 }
 
 export interface CoinResponse {
