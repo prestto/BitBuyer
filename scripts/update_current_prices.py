@@ -16,7 +16,7 @@ def update():
                     a.time_period_start,
                     a.time_period_end
                 from (
-                    select rank() over (partition by coin_id order by time_open) as rnk, *
+                    select rank() over (partition by coin_id order by time_open desc) as rnk, *
                     from coin_prices cp
                 ) as a
                 where a.rnk = 1
