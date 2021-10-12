@@ -1,8 +1,8 @@
 import { DeclarationListEmitMode } from "@angular/compiler";
 
 export interface PricePoint {
-  time_open: Date;
-  rate_open: Date;
+  time_close: Date;
+  rate_close: Date;
   coin_id: number;
 }
 

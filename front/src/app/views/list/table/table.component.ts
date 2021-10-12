@@ -15,8 +15,28 @@ export interface TableChart {
 
 export interface FormattedCurrentPrice {
   change: string;
-  current: number;
+  current: string;
   date: Date;
+}
+
+function toFixed(x: any) {
+  // Shamelessly stolen from here:
+  // https://stackoverflow.com/questions/1685680/how-to-avoid-scientific-notation-for-large-numbers-in-javascript
+  if (Math.abs(x) < 1.0) {
+    var e = parseInt(x.toString().split('e-')[1]);
+    if (e) {
+      x *= Math.pow(10, e - 1);
+      x = '0.' + (new Array(e)).join('0') + x.toString().substring(2);
+    }
+  } else {
+    var e = parseInt(x.toString().split('+')[1]);
+    if (e > 20) {
+      e -= 20;
+      x /= Math.pow(10, e);
+      x += (new Array(e + 1)).join('0');
+    }
+  }
+  return x;
 }
 
 @Component({
@@ -70,8 +90,8 @@ export class TableComponent implements OnInit {
 
     // loop on all data points, converting dates
     for (let pricePoint of coin.coinprices_set) {
-      labels.push(formatDate(pricePoint.time_open, 'Y-m-d', 'en-us'))
-      points.push(pricePoint.rate_open)
+      labels.push(formatDate(pricePoint.time_close, 'Y-m-d', 'en-us'))
+      points.push(pricePoint.rate_close)
     }
 
     // get color red (fall) or green (rise) from price 
@@ -86,16 +106,29 @@ export class TableComponent implements OnInit {
     return tc
   }
 
-  round(num: number, dp: number) {
+  roundToString(num: number, dp: number) {
     let multiple: number = dp * 10
-    return Math.round(num * multiple) / multiple
+    let rounded: number = Math.round(num * multiple) / multiple
+    // necessary to avoid JS exponential number representations
+    // yikes
+    if (rounded == 0 && num < 0.001 && num > 0) {
+      return toFixed(num)
+    }
+    else if (rounded == 0) {
+      return num.toPrecision(dp)
+    }
+    else {
+      return rounded.toString()
+    }
   }
 
   formatCurrentPrice(currentPrice: CurrentPrices) {
-    let change = this.round(100 - (currentPrice.rate_open / currentPrice.rate_close) * 100, 2)
+    let percentageChange = 100 - (currentPrice.rate_open / currentPrice.rate_close) * 100
+    let change = this.roundToString(percentageChange, 2)
+
     let fcp: FormattedCurrentPrice = {
       change: `${change}%`,
-      current: this.round(currentPrice.rate_close, 4),
+      current: this.roundToString(currentPrice.rate_close, 2),
       date: currentPrice.time_period_end
     }
     return fcp

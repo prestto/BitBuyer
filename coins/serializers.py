@@ -5,7 +5,7 @@ from rest_framework import serializers
 class FilteredListSerializer(serializers.ListSerializer):
 
     def to_representation(self, data):
-        data = data.order_by('-time_open')[:5]
+        data = reversed(data.order_by('-time_period_end')[:5])
         return super(FilteredListSerializer, self).to_representation(data)
 
 
@@ -14,7 +14,7 @@ class PricePoint(serializers.ModelSerializer):
     class Meta:
         list_serializer_class = FilteredListSerializer
         model = CoinPrices
-        fields = ('time_open', 'rate_open', 'coin_id')
+        fields = ('time_close', 'rate_close', 'coin_id')
 
 
 class CurrentPriceSerializer(serializers.ModelSerializer):
