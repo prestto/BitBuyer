@@ -20,6 +20,19 @@ sudo apt update
 sudo apt install -y python3.10 python3.10-dev python3.10-distutils libpq-dev
 ```
 
+- [Node 14](https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
+
+```bash
+# Nodejs 14 using Ubuntu (src: https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
+curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs build-essential gcc g++ make
+
+## To install the Yarn package manager, run:
+curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update && sudo apt-get install yarn
+```
+
 - [pipenv](https://pipenv.pypa.io/en/latest/#install-pipenv-today)
 
 ```bash
@@ -68,6 +81,12 @@ curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/instal
 
 ```bash
 curl -sS https://webinstall.dev/k9s | bash
+```
+
+- [angular](https://angular.io/guide/setup-local#install-the-angular-cli)
+
+```bash
+npm install -g @angular/cli
 ```
 
 ## Dev

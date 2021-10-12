@@ -1,0 +1,12 @@
+FROM node:14.18.0-buster
+
+WORKDIR /app
+
+ADD ./front/package.json .
+ADD ./front/package-lock.json .
+
+RUN npm install
+
+ADD ./front .
+
+ENTRYPOINT ["npm", "run", "start"]

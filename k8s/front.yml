@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitbuyer-front
+  labels:
+    app: bitbuyer-front
+spec:
+  selector:
+    matchLabels:
+      app: bitbuyer-front
+  template:
+    metadata:
+      labels:
+        app: bitbuyer-front
+    spec:
+      containers:
+        - name: bitbuyer-front
+          image: user632716/bitbuyer-front:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "1000Mi"
+              cpu: "250m"
+            limits:
+              memory: "1700Mi"
+              cpu: "500m"
+          env:
+            - name: ENV
+              value: DEV

@@ -52,9 +52,9 @@ function run_dump {
 function run_scrape {
 
     if [[ "$1" = "" ]]; then
-            TABLE="coins"
+        TABLE="coins"
     else
-            TABLE=$1
+        TABLE=$1
     fi
 
     cecho "BL" "Scraping $TABLE..."
@@ -93,6 +93,12 @@ function run_makemigrations {
     cecho "BL" "Migrations made."
 }
 
+function run_update_coins {
+    cecho "BL" "Updating current prices..."
+    pipenv run python ./scripts/update_current_prices.py
+    cecho "BL" "Updated current prices."
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -108,6 +114,7 @@ function show_help {
     cecho "BL" "   * push                           - Push user632716/bitbuyer:latest."
     cecho "BL" "   * migrate                        - Migrate the db."
     cecho "BL" "   * makemigrations                 - Make db migrations."
+    cecho "BL" "   * update_coins                   - Update current coin prices."
 }
 
 if [[ "$1" == "" ]]; then
@@ -143,6 +150,9 @@ migrate)
     ;;
 makemigrations)
     run_makemigrations
+    ;;
+update_coins)
+    run_update_coins
     ;;
 *)
     show_help

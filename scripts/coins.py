@@ -21,7 +21,7 @@ COL_ORDER = [
     'icon'
 ]
 
-ICON_PATH = Path('static/icons')
+ICON_PATH = Path('assets')
 base_url = "https://coinmarketcap.com/"
 DUMP = Path('./tmp/coin_list_dump.html')
 
@@ -50,7 +50,8 @@ class CoinParser:
         return self.soup.select('.coin-logo')[0]['src']
 
     def get_local_path(self) -> Path:
-        return ICON_PATH.joinpath(f'{self.get_abbreviation()}.png')
+        pre_path = 'assets'
+        return f'{pre_path}/{self.get_abbreviation()}.png'
 
     def get_detail_url(self):
         url = self.soup.select('.cmc-link')[0]['href']

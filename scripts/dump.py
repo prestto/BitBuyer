@@ -20,8 +20,13 @@ def main():
         print(f'Dumping table: {table}')
         path = RESOURCE_PATH.joinpath(f'{table}.tsv')
         # dump
-        with PostgresConnection() as pg:
-            pg.copy_to(path, table)
+        if table == 'coin_prices':
+            with PostgresConnection() as pg:
+                pg.copy_to(path, table, ['coin_id', 'rate_close', 'rate_high', 'rate_low', 'rate_open', 'time_close', 'time_open', 'time_period_end', 'time_period_start'])
+
+        else:
+            with PostgresConnection() as pg:
+                pg.copy_to(path, table)
 
 
 if __name__ == "__main__":
