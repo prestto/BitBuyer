@@ -14,7 +14,7 @@ export interface TableChart {
 }
 
 export interface FormattedCurrentPrice {
-  change: number;
+  change: string;
   current: number;
   date: Date;
 }
@@ -92,13 +92,13 @@ export class TableComponent implements OnInit {
   }
 
   formatCurrentPrice(currentPrice: CurrentPrices) {
-    console.log(currentPrice)
     let startPrice = currentPrice.rate_open
     let endPrice = currentPrice.rate_close
-    let change = this.round((startPrice / endPrice) * 100, 2)
+    console.log(`open: ${currentPrice.rate_open} -- close: ${currentPrice.rate_close}`)
+    let change = this.round(100 - (startPrice / endPrice) * 100, 2)
     let fcp: FormattedCurrentPrice = {
-      change: change,
-      current: this.round(endPrice, 2),
+      change: `${change}%`,
+      current: this.round(endPrice, 4),
       date: currentPrice.time_period_end
     }
     console.log(fcp)
