@@ -40,4 +40,18 @@ class Migration(migrations.Migration):
                 'db_table': 'coin_prices',
             },
         ),
+        migrations.CreateModel(
+            name='CurrentPrices',
+            fields=[
+                ('id', models.AutoField(primary_key=True, serialize=False)),
+                ('rate_close', models.DecimalField(decimal_places=11, max_digits=24)),
+                ('rate_open', models.DecimalField(decimal_places=11, max_digits=24)),
+                ('time_period_start', models.DateTimeField()),
+                ('time_period_end', models.DateTimeField()),
+                ('coin', models.OneToOneField(on_delete=models.deletion.CASCADE, to='coins.coins')),
+            ],
+            options={
+                'db_table': 'current_prices',
+            },
+        ),
     ]
