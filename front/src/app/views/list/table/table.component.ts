@@ -10,6 +10,7 @@ let coinsDataSource: Coin[] = [];
 export interface TableChart {
   data: ChartDataSets[];
   labels: Label[];
+  color: Color[];
 }
 
 @Component({
@@ -30,6 +31,29 @@ export class TableComponent implements OnInit {
   ) {
     this.labels = []
   }
+  getColor(points: number[]) {
+    // get color red (fall) or green (rise) from price 
+    let color: Color[];
+    if (points[0] > points[points.length - 1]) {
+      // red, as prices decreased
+      color = [
+        {
+          borderColor: 'rgba(255,0,0,0.3)',
+          backgroundColor: 'rgba(255,0,0,0.3)',
+        },
+      ]
+    }
+    else {
+      // green, as prices increased
+      color = [
+        {
+          borderColor: 'rgba(0,255,0,0.3)',
+          backgroundColor: 'rgba(0,255,0,0.3)',
+        },
+      ]
+    }
+    return color
+  }
 
   formatCoinHostory(coin: Coin) {
     // convert coin history to a human readable format
@@ -42,10 +66,14 @@ export class TableComponent implements OnInit {
       points.push(pricePoint.rate_open)
     }
 
+    // get color red (fall) or green (rise) from price 
+    let color: Color[] = this.getColor(points)
+
     // add to typed object
     let tc: TableChart = {
       data: [{ data: points, label: 'Series A' },],
-      labels: labels
+      labels: labels,
+      color: color
     }
     return tc
   }
@@ -61,7 +89,6 @@ export class TableComponent implements OnInit {
             this.allCharts[coin.abbreviation] = tableChart
           }
           this.coinsDataSource = coinResponse.results
-          // this.coinsDataSource = coinResponse.results.filter(x => x.abbreviation === 'BTC')
         }
       )
   }

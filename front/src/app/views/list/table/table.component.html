@@ -24,8 +24,8 @@
             <div *ngIf="allCharts[element.abbreviation].labels?.length > 0" class="chart-container">
                 <canvas baseChart width="60px" height="30" [datasets]="allCharts[element.abbreviation].data"
                     [labels]="allCharts[element.abbreviation].labels" [options]="lineChartOptions"
-                    [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
-                    [plugins]="lineChartPlugins">
+                    [colors]="allCharts[element.abbreviation].color" [legend]="lineChartLegend"
+                    [chartType]="lineChartType" [plugins]="lineChartPlugins">
                 </canvas>
             </div>
         </td>
