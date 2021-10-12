@@ -10,7 +10,7 @@ from modules.db import PostgresConnection
 def create_tables():
     print('Creating table: twitter_users')
     query = """
-        create table twitter_users
+        create table if not exists twitter_users
         (
             author integer PRIMARY KEY,
             name varchar(255),
@@ -23,7 +23,7 @@ def create_tables():
 
     print('Creating table: tweets')
     query = """
-        create table tweets
+        create table if not exists tweets
         (
             id varchar(31),
             author_id integer,
@@ -41,7 +41,7 @@ def create_tables():
 
     print('Creating table: tweet_sentiment')
     query = """
-        create table tweet_sentiment
+        create table if not exists tweet_sentiment
         (
             id serial,
             tweet_id varchar(31),
@@ -60,7 +60,7 @@ def create_tables():
 
     print('Creating table: coins')
     query = """
-        create table coins
+        create table if not exists coins
         (
             id serial primary key,
             name varchar(31),
@@ -74,7 +74,7 @@ def create_tables():
 
     print('Creating table: coin_prices')
     query = """
-        create table coin_prices
+        create table if not exists coin_prices
         (
         id serial primary key,
         coin_id integer,
@@ -102,13 +102,15 @@ def seed_tables():
         pg.copy_from(Path('./resources/coins.tsv'), 'coins')
     print('Seeding table: coin_prices')
     with PostgresConnection() as pg:
-        pg.copy_from(Path('./resources/coin_prices.tsv'), 'coin_prices')
+        pg.copy_from(Path('./resources/coin_prices.tsv'), 'coin_prices', ['coin_id', 'rate_close', 'rate_high', 'rate_low', 'rate_open', 'time_close', 'time_open', 'time_period_end', 'time_period_start'])
     
 
 
 def main():
-    # create all tables
-    create_tables()
+    # REDUNDANT - to avoid searching through commit history
+    # remove as tables are moved to django migrations
+    # # create all tables
+    # create_tables()
 
     # seed some dummy data
     seed_tables()

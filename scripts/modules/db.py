@@ -452,19 +452,29 @@ class PostgresConnection(DatabaseConnection):
         self.cursor.copy_expert(query, io)
         self.cursor.close()
 
-    def copy_from(self, path: Path, table_name: str):
+    def stringify_columns(self, cols:list):
+        columns_str = ''
+        if len(cols):
+            columns_str = ', '.join(cols)
+            columns_str = f'({columns_str})'
+
+        return columns_str
+
+    def copy_from(self, path: Path, table_name: str, columns: list=[]):
         """Copy from tsv file => db table"""
+        columns_str = self.stringify_columns(columns)
         self.cursor = self.connection.cursor()
         with open(path, 'r') as f:
-            self.cursor.copy_expert(f"""COPY {table_name} FROM STDIN WITH CSV HEADER DELIMITER E'\t';""", f)
+            self.cursor.copy_expert(f"""COPY {table_name} {columns_str} FROM STDIN WITH CSV HEADER DELIMITER E'\t';""", f)
         self.connection.commit()
         self.cursor.close()
     
-    def copy_to(self, path: Path, table_name: str):
+    def copy_to(self, path: Path, table_name: str, columns: list=[]):
         """Copy from db table => tsv file"""
+        columns_str = self.stringify_columns(columns)
         self.cursor = self.connection.cursor()
         with open(path, 'wb') as f:
-            self.cursor.copy_expert(f"""COPY {table_name} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
+            self.cursor.copy_expert(f"""COPY {table_name} {columns_str} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
         self.connection.commit()
         self.cursor.close()
 
