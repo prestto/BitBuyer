@@ -68,14 +68,20 @@ function run_tag {
     else
         TAG=$1
     fi
-    cecho "BL" "Building with tag: $TAG..."
+    cecho "BL" "Building: user632716/bitbuyer:$TAG..."
     docker build --file docker/Dockerfile-bitbuyer --tag user632716/bitbuyer:$TAG .
+    cecho "BL" "Building: user632716/bitbuyer-front:$TAG..."
+    docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$TAG .
     cecho "BL" "Built."
 }
 
 function run_push {
     cecho "BL" "Pushing user632716/bitbuyer:latest..."
     docker push user632716/bitbuyer:latest
+
+    cecho "BL" "Pushing user632716/bitbuyer-front:latest..."
+    docker push user632716/bitbuyer-front:latest
+
     cecho "BL" "Pushed."
 }
 
