@@ -12,3 +12,7 @@ The serial pk of the coin_prices table somehow got out of sequence.  it seems a 
 ```sql
 SELECT setval('coin_prices_id_seq', (SELECT MAX(id) FROM coin_prices)+1);
 ```
+
+## Organizing Kustomize files
+
+- [structuring dev & prod files](https://www.digitalocean.com/community/tutorials/how-to-manage-your-kubernetes-configurations-with-kustomize)
