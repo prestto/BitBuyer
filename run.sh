@@ -94,15 +94,15 @@ function run_rollout {
 
 function run_migrate {
     cecho "BL" "Migrating..."
-    kubectl exec deploy/bitbuyer-api -- python manage.py migrate
-    kubectl exec deploy/bitbuyer-api -- python manage.py migrate coins
+    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate
+    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate coins
     cecho "BL" "Migrated."
 }
 
 function run_makemigrations {
     cecho "BL" "Making migrations..."
-    kubectl exec deploy/bitbuyer-api -- python manage.py makemigrations common
-    kubectl exec deploy/bitbuyer-api -- python manage.py makemigrations coins
+    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py makemigrations common
+    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py makemigrations coins
     cecho "BL" "Migrations made."
 }
 
@@ -121,6 +121,9 @@ function run_reset_mini {
 
     cecho "BL" "Enabling ingress."
     minikube addons enable ingress
+
+    CLUSTER_IP=docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' minikube
+    cecho "BL" "Cluster running with IP: $CLUSTER_IP"
 
     cecho "BL" "Run the following to launch cluster in dev mode:"
     cecho "BL" "./run.sh dev"
