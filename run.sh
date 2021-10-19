@@ -112,6 +112,20 @@ function run_update_coins {
     cecho "BL" "Updated current prices."
 }
 
+function run_reset_mini {
+    cecho "BL" "Resetting minikube"
+    minikube delete
+
+    cecho "BL" "Reset complete, restarting."
+    minikube start --kubernetes-version=v1.20.2
+
+    cecho "BL" "Enabling ingress."
+    minikube addons enable ingress
+
+    cecho "BL" "Run the following to launch cluster in dev mode:"
+    cecho "BL" "./run.sh dev"
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -129,6 +143,7 @@ function show_help {
     cecho "BL" "   * migrate                        - Migrate the db."
     cecho "BL" "   * makemigrations                 - Make db migrations."
     cecho "BL" "   * update_coins                   - Update current coin prices."
+    cecho "BL" "   * reset_mini                     - Reset and restart minikube."
 }
 
 if [[ "$1" == "" ]]; then
@@ -170,6 +185,9 @@ makemigrations)
     ;;
 update_coins)
     run_update_coins
+    ;;
+reset_mini)
+    run_reset_mini
     ;;
 *)
     show_help
