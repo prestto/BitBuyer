@@ -1,0 +1,13 @@
+apiVersion: k3d.io/v1alpha3
+kind: Simple
+# version for k8s v1.20.2
+# image: rancher/k3s:v1.20.11+k3s2
+options:
+  k3s:
+    extraArgs:
+      - arg: "--kubelet-arg=eviction-hard=imagefs.available<1%,nodefs.available<1%"
+        nodeFilters:
+          - server:*
+      - arg: "--kubelet-arg=eviction-minimum-reclaim=imagefs.available=1%,nodefs.available=1%"
+        nodeFilters:
+          - server:*

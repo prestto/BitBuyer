@@ -67,8 +67,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 
 # launch cluster: tilt-test-cluster
-k3d cluster create bitbuyer-cluster --k3s-server-arg '--kubelet-arg=eviction-hard=imagefs.available<1%,nodefs.available<1%' \
-    --k3s-server-arg '--kubelet-arg=eviction-minimum-reclaim=imagefs.available=1%,nodefs.available=1%'
+k3d cluster create bitbuyer-cluster --config ./k3d-config.yml
 ```
 
 - [Tilt](https://docs.tilt.dev/install.html#linux)
