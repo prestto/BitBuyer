@@ -47,13 +47,28 @@ spec:
         - name: postgresql-db
           image: postgres:14.0
           volumeMounts:
+            # TODO add this to postgres-config config map
             - name: postgres-pv
               mountPath: /var/lib/postgresql/data/
           env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: POSTGRES_USER
+
             - name: POSTGRES_PASSWORD
-              value: pgpassword
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: POSTGRES_PASSWORD
+
             - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: PGDATA
+
       volumes:
         - name: postgres-pv
           persistentVolumeClaim:

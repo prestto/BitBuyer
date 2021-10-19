@@ -28,7 +28,10 @@ spec:
               cpu: "500m"
           env:
             - name: ENV
-              value: DEV
+              valueFrom:
+                configMapKeyRef:
+                  name: django-config
+                  key: ENV
 ---
 apiVersion: v1
 kind: Service

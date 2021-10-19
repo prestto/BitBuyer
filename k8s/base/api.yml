@@ -28,12 +28,37 @@ spec:
               cpu: "500m"
           env:
             - name: POSTGRES_PASSWORD
-              value: pgpassword
-            - name: POSTGRES_HOST
-              value: postgres-external
-            - name: POSTGRES_PORT
-              value: "5432"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: POSTGRES_PASSWORD
+
             - name: POSTGRES_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: POSTGRES_USER
+
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret-key
+                  key: SECRET_KEY
+
             - name: ENV
-              value: DEV
+              valueFrom:
+                configMapKeyRef:
+                  name: django-config
+                  key: ENV
+
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_HOST
+
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PORT
