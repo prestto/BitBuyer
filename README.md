@@ -7,8 +7,12 @@
     - [Node](#node)
     - [Pipenv](#pipenv)
     - [Docker](#docker)
-    - [K3d](#k3d)
     - [Tilt](#tilt)
+    - [K9s](#k9s)
+    - [Angular](#angular)
+    - [Minikube](#minikube)
+    - [Kubectl](#kubectl)
+    - [Ingress](#ingress)
   - [Dev](#dev)
 
 ## Intro
@@ -78,26 +82,48 @@ sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io
 ```
 
-### K3d
-
-- [K3d](https://k3d.io/v4.4.8/#install-script)
-- [DiskPressure issue](https://github.com/tilt-dev/tilt/issues/1076)
-
-```bash
-# install
-curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
-
-# launch cluster: tilt-test-cluster
-k3d cluster create bitbuyer-cluster --config ./k3d-config.yml
-```
-
 ### Tilt
 
-- [Tilt](https://docs.tilt.dev/install.html#linux)>
+- [Tilt](https://docs.tilt.dev/install.html#linux)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
+```
+
+### K9s
+
+- [k9s (bonus)](https://k9scli.io/topics/install/)
+
+```bash
+curl -sS https://webinstall.dev/k9s | bash
+```
+
+### Angular
+
+- [angular](https://angular.io/guide/setup-local#install-the-angular-cli)
+
+```bash
 npm install -g @angular/cli
 ```
 
+### Minikube
+
+- [install](https://minikube.sigs.k8s.io/docs/start/)
+- [k8s releases](https://kubernetes.io/releases/)
+
+OVH uses k8s `v1.20.2`, thus we need to mimic this in dev
+
+```bash
+# install
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# start
+minikube start --kubernetes-version=v1.20.2
+```
+
 ### Kubectl
+
 - [kubectl](https://v1-18.docs.kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 ```bash
@@ -112,6 +138,12 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 
 # test
 kubectl version --client
+```
+
+### Ingress
+
+```bash
+minikube addons enable ingress
 ```
 
 ## Dev
