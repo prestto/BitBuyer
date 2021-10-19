@@ -85,6 +85,13 @@ function run_push {
     cecho "BL" "Pushed."
 }
 
+function run_rollout {
+    cecho "BL" "Rolling out bitbuyer-api"
+    kubectl --context minikube rollout restart -n bitbuyer deploy/bitbuyer-api
+    cecho "BL" "Rolling out bitbuyer-front"
+    kubectl --context minikube rollout restart -n bitbuyer deploy/bitbuyer-front
+}
+
 function run_migrate {
     cecho "BL" "Migrating..."
     kubectl exec deploy/bitbuyer-api -- python manage.py migrate
@@ -118,6 +125,7 @@ function show_help {
     cecho "BL" "   *         coin_prices            - Scrape coin prices."
     cecho "BL" "   * tag <table>                    - Build & tag the docker image."
     cecho "BL" "   * push                           - Push user632716/bitbuyer:latest."
+    cecho "BL" "   * rollout                        - Redeploy on dev k8s using dockerhub image."
     cecho "BL" "   * migrate                        - Migrate the db."
     cecho "BL" "   * makemigrations                 - Make db migrations."
     cecho "BL" "   * update_coins                   - Update current coin prices."
@@ -150,6 +158,9 @@ tag)
     ;;
 push)
     run_push
+    ;;
+rollout)
+    run_rollout
     ;;
 migrate)
     run_migrate
