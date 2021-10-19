@@ -13,6 +13,7 @@
     - [Minikube](#minikube)
     - [Kubectl](#kubectl)
     - [Ingress](#ingress)
+    - [/etc/hosts](#etchosts)
   - [Dev](#dev)
 
 ## Intro
@@ -144,6 +145,21 @@ kubectl version --client
 
 ```bash
 minikube addons enable ingress
+```
+
+### /etc/hosts
+
+Add the host (`bitbuyer.tom-preston.info`) to `/etc/hosts`:
+
+```bash
+# get the IP
+kubectl get -n bitbuyer svc front-external -o jsonpath='{.spec.clusterIP}'
+
+# add to /etc/hosts
+sudo nano /etc/hosts
+
+# add an entry like
+# 192.168.49.2    bitbuyer.tom-preston.info
 ```
 
 ## Dev

@@ -2,13 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     kubernetes.io/ingress.class: nginx
   name: ingress
   namespace: bitbuyer
 spec:
   rules:
-    - host: bitbuyer.info
+    - host: bitbuyer.tom-preston.info
       http:
         paths:
           - backend:
