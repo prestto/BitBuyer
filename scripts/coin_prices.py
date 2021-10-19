@@ -32,6 +32,7 @@ class RequestFactory:
     - per 100 data points returned
     """
     time_format = '%Y-%m-%dT%H:%M:%S'
+
     def __init__(self, currency: str = 'USD', period: str = '1DAY', limit: int = 100):
         self.currency = currency
         self.period = period
@@ -43,7 +44,7 @@ class RequestFactory:
     def get_header(self):
         return {'X-CoinAPI-Key': COIN_API_KEY}
 
-    def format_datetime(self, dt, force_time: str=None):
+    def format_datetime(self, dt, force_time: str = None):
         if not isinstance(dt, datetime):
             raise TypeError(f'Datetime should be a datetime not: {type(dt)}')
 
@@ -55,7 +56,7 @@ class RequestFactory:
         elif force_time == 'end':
             return datetime.combine(dt.date(), time.max).strftime(self.time_format)
         else:
-            return dt.strftime(self.time_format) 
+            return dt.strftime(self.time_format)
 
     def query(self, abbreviation: str, time_start: datetime = datetime.fromisoformat("2016-01-01T00:00:00"), time_end: datetime = datetime.now()):
         time_start = self.format_datetime(time_start, 'start')
@@ -63,7 +64,6 @@ class RequestFactory:
         print(f'Requesting: {abbreviation}, {time_start}, {time_end}, {self.currency}, {self.period}, {self.limit}')
         r = self.get_request(abbreviation, time_start, time_end)
         return requests.get(r, headers=self.get_header())
-        
 
 
 class Coin:
