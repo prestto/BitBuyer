@@ -29,3 +29,16 @@ spec:
           env:
             - name: ENV
               value: DEV
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-external
+spec:
+  type: ClusterIP
+  selector:
+    app: bitbuyer-front
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

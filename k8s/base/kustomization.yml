@@ -5,3 +5,4 @@ resources:
   - api.yml
   - postgres.yml
   - front.yml
+  - ingress.yml
