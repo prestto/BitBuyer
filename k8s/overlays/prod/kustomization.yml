@@ -4,6 +4,7 @@ bases:
 
 resources:
   - configmaps.yml
+  - volumes.yml
 
 patchesStrategicMerge:
   - ingress.yml
