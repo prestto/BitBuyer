@@ -1,0 +1,16 @@
+# Stage 0, "build-stage"
+# temporary image, used only to build the angular app
+FROM node:12.16.2 as build-stage
+WORKDIR /app
+COPY ./front/package*.json /app/
+RUN npm install
+COPY ./front/ /app/
+RUN npm run build
+
+# Stage 1 the final container
+# nginx image to contain the angular distribution
+FROM nginx:1.21.3
+#Copy ci-dashboard-dist
+COPY --from=build-stage /app/dist/front /usr/share/nginx/html
+#Copy default nginx configuration
+COPY ./front/nginx-custom.conf /etc/nginx/conf.d/default.conf
