@@ -157,6 +157,11 @@ function run_reset_mini {
     cecho "BL" "./run.sh dev"
 }
 
+function run_forward_postgres {
+    cecho "BL" "Setting up port forward to postgres-db"
+    kubectl --context kubernetes-admin@perso port-forward -n bitbuyer svc/postgres-internal 5432:5432
+}
+
 function show_help {
     cecho "BL" "Help: $0 <ACTION>"
     cecho "BL" "Parameters :"
@@ -178,6 +183,7 @@ function show_help {
     cecho "BL" "   * deploy <env>                   - Deploy to cluster (default env=dev)."
     cecho "BL" "   *        dev                     - Deploy to cluster: minikube."
     cecho "BL" "   *        prod                    - Deploy to cluster: kubernetes-admin@perso."
+    cecho "BL" "   * forward_postgres               - Set up post forward to postgres on cluster kubernetes-admin@perso"
 }
 
 if [[ "$1" == "" ]]; then
@@ -225,6 +231,9 @@ reset_mini)
     ;;
 deploy)
     run_deploy $2
+    ;;
+forward_postgres)
+    run_forward_postgres
     ;;
 *)
     show_help
