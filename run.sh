@@ -62,22 +62,55 @@ function run_scrape {
     cecho "BL" "Scrape complete."
 }
 
-function run_tag {
+function run_build {
+    TAG="latest"
     if [[ $1 = "" ]]; then
-        TAG="latest"
+        ENV="dev"
     else
-        TAG=$1
+        ENV=$1
     fi
     cecho "BL" "Building: user632716/bitbuyer:$TAG..."
     docker build --file docker/Dockerfile-bitbuyer --tag user632716/bitbuyer:$TAG .
-    cecho "BL" "Building: user632716/bitbuyer-front:$TAG..."
-    docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$TAG .
+
+    # check the value is recognized, otherwise error quit
+    # TODO factorize this, its common to run_deploy
+    if [[ $ENV != "dev" ]] && [[ $ENV != "prod" ]]; then
+        cecho "YE" "$ENV was is not a recognized value, try 'dev' or 'prod'"
+        cecho "YE" "Exiting process"
+        exit 1
+    fi
+
+    # set the dockerfile to use
+    if [[ $ENV = "dev" ]]; then
+        # dev
+        DOCKERFILE=docker/Dockerfile-bitbuyer-front
+        cecho "BL" "Building: docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$ENV --tag user632716/bitbuyer-front:$TAG ."
+        docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$ENV --tag user632716/bitbuyer-front:$TAG .
+    else
+        # prod
+        cecho "BL" "Building: docker build --file docker/Dockerfile-bitbuyer-front-prod --tag user632716/bitbuyer-front:$ENV --tag user632716/bitbuyer-front:$TAG ."
+        docker build --file docker/Dockerfile-bitbuyer-front-prod --tag user632716/bitbuyer-front:$ENV .
+    fi
+
     cecho "BL" "Built."
 }
 
 function run_push {
     cecho "BL" "Pushing user632716/bitbuyer:latest..."
     docker push user632716/bitbuyer:latest
+
+    # default to latest
+    if [[ $1 = "" ]]; then
+        TAG="dev"
+    else
+        TAG=$1
+    fi
+
+    if [[ $TAG != "dev" ]] && [[ $TAG != "prod" ]]; then
+        cecho "YE" "$TAG only tags 'dev' or 'prod' are accepted"
+        cecho "YE" "Exiting process"
+        exit 1
+    fi
 
     cecho "BL" "Pushing user632716/bitbuyer-front:latest..."
     docker push user632716/bitbuyer-front:latest
@@ -173,8 +206,12 @@ function show_help {
     cecho "BL" "   * scrape <table>                 - Scrape a data for a table."
     cecho "BL" "   *         coins                  - Scrape coins table."
     cecho "BL" "   *         coin_prices            - Scrape coin prices."
-    cecho "BL" "   * tag <table>                    - Build & tag the docker image."
+    cecho "BL" "   * build <env>                    - Build & tag the docker image (default env=dev)."
+    cecho "BL" "   *     dev                        - Build & tag images, front will be tagged for dev."
+    cecho "BL" "   *     prod                       - Build & tag images, front will be tagged for prod."
     cecho "BL" "   * push                           - Push user632716/bitbuyer:latest."
+    cecho "BL" "   *     dev                        - Push front and back images, front only with dev."
+    cecho "BL" "   *     prod                       - Push front and back images, front only with prod."
     cecho "BL" "   * rollout                        - Redeploy on dev k8s using dockerhub image."
     cecho "BL" "   * migrate                        - Migrate the db."
     cecho "BL" "   * makemigrations                 - Make db migrations."
@@ -208,11 +245,11 @@ dump)
 scrape)
     run_scrape $2
     ;;
-tag)
-    run_tag $2
+build)
+    run_build $2
     ;;
 push)
-    run_push
+    run_push $2
     ;;
 rollout)
     run_rollout
