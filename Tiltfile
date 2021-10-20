@@ -1,5 +1,5 @@
 # specify k8s config
-k8s_yaml(kustomize('./k8s/base/'))
+k8s_yaml(kustomize('./k8s/overlays/dev'))
 
 # run app
 k8s_resource('bitbuyer-api', port_forwards=8000)

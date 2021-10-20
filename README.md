@@ -153,7 +153,7 @@ Add the host (`bitbuyer.tom-preston.info`) to `/etc/hosts`:
 
 ```bash
 # get the IP
-kubectl get -n bitbuyer svc front-external -o jsonpath='{.spec.clusterIP}'
+kubectl get -n bitbuyer svc front-internal -o jsonpath='{.spec.clusterIP}'
 
 # add to /etc/hosts
 sudo nano /etc/hosts
