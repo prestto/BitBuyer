@@ -106,6 +106,34 @@ function run_makemigrations {
     cecho "BL" "Migrations made."
 }
 
+function run_deploy {
+    # set the default option as dev
+    if [[ $1 = "" ]]; then
+        ENV="dev"
+    else
+        ENV=$1
+    fi
+
+    # check the value is recognized, otherwise error quit
+    if [[ $ENV != "dev" ]] && [[ $ENV != "prod" ]]; then
+        cecho "YE" "$ENV was is not a recognized value, try 'dev' or 'prod'"
+        cecho "YE" "Exiting process"
+        exit 1
+    fi
+
+    # match the cluster
+    if [[ $ENV = "dev" ]]; then
+        CLUSTER='minikube'
+    fi
+
+    if [[ $ENV = "prod" ]]; then
+        CLUSTER='kubernetes-admin@perso'
+    fi
+
+    cecho "BL" "Deploying to cluster: $CLUSTER (mode: $ENV)..."
+    kubectl --context ${CLUSTER} -n bitbuyer apply -k ./k8s/overlays/${ENV}/
+}
+
 function run_update_coins {
     cecho "BL" "Updating current prices..."
     pipenv run python ./scripts/update_current_prices.py
@@ -147,6 +175,9 @@ function show_help {
     cecho "BL" "   * makemigrations                 - Make db migrations."
     cecho "BL" "   * update_coins                   - Update current coin prices."
     cecho "BL" "   * reset_mini                     - Reset and restart minikube."
+    cecho "BL" "   * deploy <env>                   - Deploy to cluster (default env=dev)."
+    cecho "BL" "   *        dev                     - Deploy to cluster: minikube."
+    cecho "BL" "   *        prod                    - Deploy to cluster: kubernetes-admin@perso."
 }
 
 if [[ "$1" == "" ]]; then
@@ -191,6 +222,9 @@ update_coins)
     ;;
 reset_mini)
     run_reset_mini
+    ;;
+deploy)
+    run_deploy $2
     ;;
 *)
     show_help
