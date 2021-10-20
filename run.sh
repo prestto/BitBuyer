@@ -112,17 +112,48 @@ function run_push {
         exit 1
     fi
 
-    cecho "BL" "Pushing user632716/bitbuyer-front:latest..."
-    docker push user632716/bitbuyer-front:latest
+    if [[ $TAG = "dev" ]]; then
+        # dev
+        cecho "BL" "Pushing user632716/bitbuyer-front:latest..."
+        docker push user632716/bitbuyer-front:latest
+        cecho "BL" "Pushing user632716/bitbuyer-front:dev..."
+        docker push user632716/bitbuyer-front:dev
+    else
+        # prod
+        cecho "BL" "Pushing user632716/bitbuyer-front:prod..."
+        docker push user632716/bitbuyer-front:prod
+    fi
 
     cecho "BL" "Pushed."
 }
 
 function run_rollout {
-    cecho "BL" "Rolling out bitbuyer-api"
-    kubectl --context minikube rollout restart -n bitbuyer deploy/bitbuyer-api
-    cecho "BL" "Rolling out bitbuyer-front"
-    kubectl --context minikube rollout restart -n bitbuyer deploy/bitbuyer-front
+    # default to latest
+    if [[ $1 = "" ]]; then
+        ENV="dev"
+    else
+        ENV=$1
+    fi
+
+    if [[ $ENV != "dev" ]] && [[ $ENV != "prod" ]]; then
+        cecho "YE" "$ENV only tags 'dev' or 'prod' are accepted"
+        cecho "YE" "Exiting process"
+        exit 1
+    fi
+
+    # match the cluster
+    if [[ $ENV = "dev" ]]; then
+        CLUSTER='minikube'
+    fi
+
+    if [[ $ENV = "prod" ]]; then
+        CLUSTER='kubernetes-admin@perso'
+    fi
+
+    cecho "BL" "Rolling out bitbuyer-api ${CLUSTER}"
+    kubectl --context ${CLUSTER} rollout restart -n bitbuyer deploy/bitbuyer-api
+    cecho "BL" "Rolling out bitbuyer-front ${CLUSTER}"
+    kubectl --context ${CLUSTER} rollout restart -n bitbuyer deploy/bitbuyer-front
 }
 
 function run_migrate {
@@ -165,6 +196,8 @@ function run_deploy {
 
     cecho "BL" "Deploying to cluster: $CLUSTER (mode: $ENV)..."
     kubectl --context ${CLUSTER} -n bitbuyer apply -k ./k8s/overlays/${ENV}/
+
+    run_rollout $ENV
 }
 
 function run_update_coins {
@@ -212,7 +245,9 @@ function show_help {
     cecho "BL" "   * push                           - Push user632716/bitbuyer:latest."
     cecho "BL" "   *     dev                        - Push front and back images, front only with dev."
     cecho "BL" "   *     prod                       - Push front and back images, front only with prod."
-    cecho "BL" "   * rollout                        - Redeploy on dev k8s using dockerhub image."
+    cecho "BL" "   * rollout                        - Redeploy on k8s using dockerhub image."
+    cecho "BL" "   *     dev                        - Rollout dev"
+    cecho "BL" "   *     prod                       - Rollout prod."
     cecho "BL" "   * migrate                        - Migrate the db."
     cecho "BL" "   * makemigrations                 - Make db migrations."
     cecho "BL" "   * update_coins                   - Update current coin prices."
@@ -252,7 +287,7 @@ push)
     run_push $2
     ;;
 rollout)
-    run_rollout
+    run_rollout $2
     ;;
 migrate)
     run_migrate
