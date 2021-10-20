@@ -1,9 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt"
   name: ingress
   namespace: bitbuyer
 spec:
+  tls:
+    - hosts:
+        - bitbuyer.tom-preston.co.uk
+      secretName: tls-secret
   rules:
     - host: bitbuyer.tom-preston.co.uk
       http:
