@@ -34,19 +34,14 @@ ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = []
 if ENV == 'PROD':
     ALLOWED_HOSTS.append('api.tom-preston.co.uk')
-    # TODO change
-    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOWED_ORIGINS.append('https://bitbuyer.tom-preston.co.uk')
+
 if ENV == 'DEV':
     ALLOWED_HOSTS.append('*')
     CORS_ALLOW_ALL_ORIGINS = True
-    # CORS_ORIGIN_WHITELIST.append('bitbuyer-front')
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',
-]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
