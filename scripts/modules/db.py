@@ -13,11 +13,11 @@ from psycopg2.extras import execute_values
 logger = logging.getLogger(__name__)
 
 DB_SERVER = {
-    "hostname": os.environ.get('DB_HOST', '172.26.0.2'),
-    "port": os.environ.get('DB_PORT', '5432'),
+    "hostname": os.environ.get('POSTGRES_HOST', '172.26.0.2'),
+    "port": os.environ.get('POSTGRES_PORT', '5432'),
     # "database": os.environ.get('DB_NAME', ''),
-    "username": os.environ.get('DB_USER', 'postgres'),
-    "password": os.environ.get('DB_PASSWORD', 'pgpassword'),
+    "username": os.environ.get('POSTGRES_USER', 'postgres'),
+    "password": os.environ.get('POSTGRES_PASSWORD', 'pgpassword'),
 }
 
 """
@@ -243,7 +243,7 @@ class PostgresConnection(DatabaseConnection):
         row_dict = {}
         for i, col in enumerate(columns):
             row_dict[col.name] = result[i]
-        
+
         return row_dict
 
     def _results_to_dict(self, results: List[tuple]):
@@ -454,7 +454,7 @@ class PostgresConnection(DatabaseConnection):
         self.cursor.copy_expert(query, io)
         self.cursor.close()
 
-    def stringify_columns(self, cols:list):
+    def stringify_columns(self, cols: list):
         columns_str = ''
         if len(cols):
             columns_str = ', '.join(cols)
@@ -462,21 +462,23 @@ class PostgresConnection(DatabaseConnection):
 
         return columns_str
 
-    def copy_from(self, path: Path, table_name: str, columns: list=[]):
+    def copy_from(self, path: Path, table_name: str, columns: list = []):
         """Copy from tsv file => db table"""
         columns_str = self.stringify_columns(columns)
         self.cursor = self.connection.cursor()
         with open(path, 'r') as f:
-            self.cursor.copy_expert(f"""COPY {table_name} {columns_str} FROM STDIN WITH CSV HEADER DELIMITER E'\t';""", f)
+            self.cursor.copy_expert(
+                f"""COPY {table_name} {columns_str} FROM STDIN WITH CSV HEADER DELIMITER E'\t';""", f)
         self.connection.commit()
         self.cursor.close()
-    
-    def copy_to(self, path: Path, table_name: str, columns: list=[]):
+
+    def copy_to(self, path: Path, table_name: str, columns: list = []):
         """Copy from db table => tsv file"""
         columns_str = self.stringify_columns(columns)
         self.cursor = self.connection.cursor()
         with open(path, 'wb') as f:
-            self.cursor.copy_expert(f"""COPY {table_name} {columns_str} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
+            self.cursor.copy_expert(
+                f"""COPY {table_name} {columns_str} TO STDOUT WITH CSV HEADER DELIMITER E'\t';""", f)
         self.connection.commit()
         self.cursor.close()
 
