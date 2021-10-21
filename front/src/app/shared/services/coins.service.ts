@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -22,6 +22,8 @@ export class CoinsService {
   }
 
   getCoins(): Observable<CoinResponse> {
-    return this._http.get<CoinResponse>(`${environment.apiUrl}/coins/`)
+    const headers = new HttpHeaders()
+      .set('content-type', 'application/json');
+    return this._http.get<CoinResponse>(`${environment.apiUrl}/coins/`, { 'headers': headers })
   }
 }
