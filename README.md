@@ -1,5 +1,21 @@
 # BitBuyer
 
+- [BitBuyer](#bitbuyer)
+  - [Intro](#intro)
+  - [Install](#install)
+    - [Python](#python)
+    - [Node](#node)
+    - [Pipenv](#pipenv)
+    - [Docker](#docker)
+    - [Tilt](#tilt)
+    - [K9s](#k9s)
+    - [Angular](#angular)
+    - [Minikube](#minikube)
+    - [Kubectl](#kubectl)
+    - [Ingress](#ingress)
+    - [/etc/hosts](#etchosts)
+  - [Dev](#dev)
+
 ## Intro
 
 Predict buy or sell on bitcoins.
@@ -12,6 +28,8 @@ Lets look at news outlets then, specifically twitter.  We've taken 16M tweets an
 
 Bitbuyer is tested on an ubuntu system.  The following dependencies are required:
 
+### Python
+
 - [python 3.10](https://github.com/deadsnakes/python3.10)
 
 ```bash
@@ -19,6 +37,8 @@ sudo add-apt-repository --yes ppa:deadsnakes/ppa
 sudo apt update
 sudo apt install -y python3.10 python3.10-dev python3.10-distutils libpq-dev
 ```
+
+### Node
 
 - [Node 14](https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
 
@@ -33,11 +53,15 @@ echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/deb
 sudo apt-get update && sudo apt-get install yarn
 ```
 
+### Pipenv
+
 - [pipenv](https://pipenv.pypa.io/en/latest/#install-pipenv-today)
 
 ```bash
 pip3 install --user pipenv
 ```
+
+### Docker
 
 - [Docker](https://docs.docker.com/engine/install/ubuntu/)
 
@@ -59,17 +83,7 @@ sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io
 ```
 
-- [K3d](https://k3d.io/v4.4.8/#install-script)
-- [DiskPressure issue](https://github.com/tilt-dev/tilt/issues/1076)
-
-```bash
-# install
-curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
-
-# launch cluster: tilt-test-cluster
-k3d cluster create bitbuyer-cluster --k3s-server-arg '--kubelet-arg=eviction-hard=imagefs.available<1%,nodefs.available<1%' \
-    --k3s-server-arg '--kubelet-arg=eviction-minimum-reclaim=imagefs.available=1%,nodefs.available=1%'
-```
+### Tilt
 
 - [Tilt](https://docs.tilt.dev/install.html#linux)
 
@@ -77,16 +91,75 @@ k3d cluster create bitbuyer-cluster --k3s-server-arg '--kubelet-arg=eviction-har
 curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
 ```
 
+### K9s
+
 - [k9s (bonus)](https://k9scli.io/topics/install/)
 
 ```bash
 curl -sS https://webinstall.dev/k9s | bash
 ```
 
+### Angular
+
 - [angular](https://angular.io/guide/setup-local#install-the-angular-cli)
 
 ```bash
 npm install -g @angular/cli
+```
+
+### Minikube
+
+- [install](https://minikube.sigs.k8s.io/docs/start/)
+- [k8s releases](https://kubernetes.io/releases/)
+
+OVH uses k8s `v1.20.2`, thus we need to mimic this in dev
+
+```bash
+# install
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# start
+minikube start --kubernetes-version=v1.20.2
+```
+
+### Kubectl
+
+- [kubectl](https://v1-18.docs.kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+```bash
+# Install version: 
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.20.11/bin/linux/amd64/kubectl
+
+# make ezxecutable
+chmod +x ./kubectl
+
+# move to bin
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+# test
+kubectl version --client
+```
+
+### Ingress
+
+```bash
+minikube addons enable ingress
+```
+
+### /etc/hosts
+
+Add the host (`bitbuyer.tom-preston.info`) to `/etc/hosts`:
+
+```bash
+# get the IP
+kubectl get -n bitbuyer svc front-internal -o jsonpath='{.spec.clusterIP}'
+
+# add to /etc/hosts
+sudo nano /etc/hosts
+
+# add an entry like
+# 192.168.49.2    bitbuyer.tom-preston.info
 ```
 
 ## Dev
@@ -102,9 +175,3 @@ To run a dev server:
 # open tilt GUI
 xdg-open http://localhost:10350
 ```
-
-## Deployment
-
-The bitbuyer app is deployed at [bitbuyer.tom-preston.co.uk](https://bitbuyer.tom-preston.co.uk).
-
-Ingress is handled in the [ingress repo](https://github.com/prestto/ingress).

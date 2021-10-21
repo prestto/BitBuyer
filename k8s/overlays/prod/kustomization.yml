@@ -1,0 +1,12 @@
+---
+bases:
+  - ../../base
+
+resources:
+  - configmaps.yml
+  - volumes.yml
+  - front.yml
+
+patchesStrategicMerge:
+  - ingress.yml
+  - api.yml

@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-external
+  namespace: bitbuyer
+spec:
+  # NOTE This shouldn't really be a nodeport, but minikube ships whit
+  # no load balancer, thus we use a nodeport
+  type: NodePort
+  selector:
+    app: postgresql-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+      nodePort: 32543

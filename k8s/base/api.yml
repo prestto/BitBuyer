@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitbuyer-api
+  namespace: bitbuyer
+  labels:
+    app: bitbuyer-api
+spec:
+  selector:
+    matchLabels:
+      app: bitbuyer-api
+  template:
+    metadata:
+      labels:
+        app: bitbuyer-api
+    spec:
+      containers:
+        - name: bitbuyer-api
+          image: user632716/bitbuyer:latest
+          command: ["python"]
+          args: ["manage.py", "runserver", "0.0.0.0:8000"]
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: POSTGRES_PASSWORD
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: POSTGRES_USER
+
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret-key
+                  key: SECRET_KEY
+
+            - name: ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: django-config
+                  key: ENV
+
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_HOST
+
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PORT

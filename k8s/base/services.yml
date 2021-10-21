@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-internal
+  namespace: bitbuyer
+spec:
+  selector:
+    app: bitbuyer-api
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-internal
+  namespace: bitbuyer
+spec:
+  type: ClusterIP
+  selector:
+    app: bitbuyer-front
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-internal
+  namespace: bitbuyer
+spec:
+  type: ClusterIP
+  selector:
+    app: postgresql-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

@@ -20,10 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev')
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ENV = os.environ.get('ENV', 'PROD')
+ENV = os.environ.get('ENV', '')
 
 # default to debug = False
 DEBUG = False
@@ -31,21 +31,17 @@ if ENV == 'DEV':
     DEBUG = True
 
 ALLOWED_HOSTS = []
-# CORS_ORIGIN_WHITELIST = []
+CORS_ALLOWED_ORIGINS = []
 if ENV == 'PROD':
-    ALLOWED_HOSTS.append('*.tom-preston.co.uk')
-    # CORS_ORIGIN_WHITELIST.append('') # TODO
+    ALLOWED_HOSTS.append('api.tom-preston.co.uk')
+    CORS_ALLOWED_ORIGINS.append('https://bitbuyer.tom-preston.co.uk')
+
 if ENV == 'DEV':
     ALLOWED_HOSTS.append('*')
     CORS_ALLOW_ALL_ORIGINS = True
-    # CORS_ORIGIN_WHITELIST.append('bitbuyer-front')
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',
-]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -102,10 +98,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
-        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'pgpassword'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'postgres-external'),
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        'USER': os.environ.get('POSTGRES_USER', ''),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
+        'HOST': os.environ.get('POSTGRES_HOST', ''),
+        'PORT': os.environ.get('POSTGRES_PORT', ''),
     }
 }
 
@@ -157,4 +153,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
     'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
 }

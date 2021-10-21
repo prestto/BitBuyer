@@ -1,0 +1,10 @@
+---
+bases:
+  - ../../base
+
+resources:
+  - secrets.yml
+  - configmaps.yml
+  - services.yml
+  - volumes.yml
+  - front.yml

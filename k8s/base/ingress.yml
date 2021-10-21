@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: ingress
+  namespace: bitbuyer
+spec:
+  rules:
+    - host: bitbuyer.tom-preston.info
+      http:
+        paths:
+          - backend:
+              service:
+                name: front-internal
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
+    - host: api.tom-preston.info
+      http:
+        paths:
+          - backend:
+              service:
+                name: back-internal
+                port:
+                  number: 8000
+            path: /
+            pathType: Prefix

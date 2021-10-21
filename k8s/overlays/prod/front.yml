@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bitbuyer-front
+  namespace: bitbuyer
   labels:
     app: bitbuyer-front
 spec:
@@ -15,7 +16,7 @@ spec:
     spec:
       containers:
         - name: bitbuyer-front
-          image: user632716/bitbuyer-front:latest
+          image: user632716/bitbuyer-front:prod
           ports:
             - containerPort: 8080
           resources:
@@ -27,4 +28,7 @@ spec:
               cpu: "500m"
           env:
             - name: ENV
-              value: DEV
+              valueFrom:
+                configMapKeyRef:
+                  name: django-config
+                  key: ENV

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bitbuyer-api
+  namespace: bitbuyer
   labels:
     app: bitbuyer-api
 spec:
@@ -16,6 +17,8 @@ spec:
       containers:
         - name: bitbuyer-api
           image: user632716/bitbuyer:latest
+          command: ["gunicorn"]
+          args: ["common.wsgi:application", "--bind", "0.0.0.0:8000"]
           ports:
             - containerPort: 8000
           resources:
@@ -25,14 +28,3 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
-          env:
-            - name: POSTGRES_PASSWORD
-              value: pgpassword
-            - name: POSTGRES_HOST
-              value: postgres-external
-            - name: POSTGRES_PORT
-              value: "5432"
-            - name: POSTGRES_USER
-              value: postgres
-            - name: ENV
-              value: DEV
