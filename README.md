@@ -30,17 +30,18 @@ In dev, the app is deployed on a [minikube](https://minikube.sigs.k8s.io/docs/st
 
 ## Dev
 
-If you'd like to clone and run the project, this section explains how to do so (bear in mind that the project relies on bash).
+If you'd like to clone and run the project, this section explains how to do so (bear in mind that the project relies on bash, as it was developed on ubuntu 20.04.03).
 
 ### Install
 
 The following dependencies must be installed to run in local:
 
 - [minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [Kubectl](https://v1-18.docs.kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Tilt](https://tilt.dev/)
 - [Docker](https://www.docker.com/)
 
-You should run the commands in the [install doc](./install.md).
+Commands to install these dependencies, along with links to the official docs can be found in the [install doc](./install.md).
 
 ### /etc/hosts
 

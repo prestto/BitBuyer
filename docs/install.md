@@ -19,9 +19,11 @@ This doc is separated into 2 parts, [Dev dependencies](#dev-dependencies) and [A
     - [Node](#node)
 
 ## Dev dependencies
+
 The following dependencies are required to run the project in local:
 
 - [minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [Kubectl](https://v1-18.docs.kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Tilt](https://tilt.dev/)
 - [Docker](https://www.docker.com/)
 
