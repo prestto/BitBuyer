@@ -84,11 +84,11 @@ function run_build {
     if [[ $ENV = "dev" ]]; then
         # dev
         DOCKERFILE=docker/Dockerfile-bitbuyer-front
-        cecho "BL" "Building: docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$ENV --tag user632716/bitbuyer-front:$TAG ."
-        docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$ENV --tag user632716/bitbuyer-front:$TAG .
+        cecho "BL" "Building: docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$ENV ."
+        docker build --file docker/Dockerfile-bitbuyer-front --tag user632716/bitbuyer-front:$ENV .
     else
         # prod
-        cecho "BL" "Building: docker build --file docker/Dockerfile-bitbuyer-front-prod --tag user632716/bitbuyer-front:$ENV --tag user632716/bitbuyer-front:$TAG ."
+        cecho "BL" "Building: docker build --file docker/Dockerfile-bitbuyer-front-prod --tag user632716/bitbuyer-front:$ENV ."
         docker build --file docker/Dockerfile-bitbuyer-front-prod --tag user632716/bitbuyer-front:$ENV .
     fi
 
