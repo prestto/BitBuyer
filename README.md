@@ -2,154 +2,49 @@
 
 - [BitBuyer](#bitbuyer)
   - [Intro](#intro)
-  - [Install](#install)
-    - [Python](#python)
-    - [Node](#node)
-    - [Pipenv](#pipenv)
-    - [Docker](#docker)
-    - [Tilt](#tilt)
-    - [K9s](#k9s)
-    - [Angular](#angular)
-    - [Minikube](#minikube)
-    - [Kubectl](#kubectl)
-    - [Ingress](#ingress)
-    - [/etc/hosts](#etchosts)
+  - [Overview](#overview)
   - [Dev](#dev)
+    - [Install](#install)
+    - [/etc/hosts](#etchosts)
+    - [Run a dev server](#run-a-dev-server)
 
 ## Intro
 
-Predict buy or sell on bitcoins.
+The goal of this project is to predict buy or sell on bitcoins.
 
 The price of bitcoin is notoriously volatile.  This is because it has no inherent value, it's price is based almost exclusively on speculation.  How can you accurately predict the value of such an asset?  The short answer is that's almost impossible.  As so much of the price is speculative though, we can suppose that the decision to buy and sell is impacted by news, and online word of mouth.  This is compounded by the fact that bitcoin is held by private individuals, as opposed to companies.
 
-Lets look at news outlets then, specifically twitter.  We've taken 16M tweets and used Natural Language Processing techniques determine the sentiment of the tweet (positive, negative or passive) and used them as a predictor to buy, sell, or hodl.
+Let's look at news outlets then, specifically twitter.  We've taken 16M tweets and used Natural Language Processing techniques determine the sentiment of the tweet (positive, negative or passive) and used them as a predictor to buy, sell, or hodl.
 
-## Install
+## Overview
 
-Bitbuyer is tested on an ubuntu system.  The following dependencies are required:
+![Technologies](./img/../docs/img/technos.png)
 
-### Python
+The webapp part of the project is handled in [Postgres](https://www.postgresql.org/), [django](https://www.djangoproject.com/) and [Angular](https://angular.io/).
 
-- [python 3.10](https://github.com/deadsnakes/python3.10)
+The way in which the project is deployed consititues a large part of the project, and is handled using [Docker](https://www.docker.com/) containers.
 
-```bash
-sudo add-apt-repository --yes ppa:deadsnakes/ppa
-sudo apt update
-sudo apt install -y python3.10 python3.10-dev python3.10-distutils libpq-dev
-```
+Deployment is separated into two distinct environments, production (henceforth prod) and development (dev).
 
-### Node
+In dev, the app is deployed on a [minikube](https://minikube.sigs.k8s.io/docs/start/) cluster (a single node kubernetes cluster run on a local machine), using [Tilt](https://tilt.dev/) to facilitate live updates.  In prod, the project is deployed on [OVH](https://www.ovh.co.uk/).
 
-- [Node 14](https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
+## Dev
 
-```bash
-# Nodejs 14 using Ubuntu (src: https://github.com/nodesource/distributions/blob/master/README.md#debinstall)
-curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt-get install -y nodejs build-essential gcc g++ make
+If you'd like to clone and run the project, this section explains how to do so (bear in mind that the project relies on bash).
 
-## To install the Yarn package manager, run:
-curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
-echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt-get update && sudo apt-get install yarn
-```
+### Install
 
-### Pipenv
+The following dependencies must be installed to run in local:
 
-- [pipenv](https://pipenv.pypa.io/en/latest/#install-pipenv-today)
+- [minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [Tilt](https://tilt.dev/)
+- [Docker](https://www.docker.com/)
 
-```bash
-pip3 install --user pipenv
-```
-
-### Docker
-
-- [Docker](https://docs.docker.com/engine/install/ubuntu/)
-
-```bash
-# uninstall preexisting
-sudo apt remove -y docker docker-engine docker.io docker-compose golang-docker-credential-helpers containerd runc
-sudo apt autoremove -y
-sudo rm -rf ~/.docker
-
-# install dependancies
-sudo apt install -y apt-transport-https ca-certificates curl gnupg gnupg-agent software-properties-common lsb-release
-
-# install docker-ce
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo \
-  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io
-```
-
-### Tilt
-
-- [Tilt](https://docs.tilt.dev/install.html#linux)
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
-```
-
-### K9s
-
-- [k9s (bonus)](https://k9scli.io/topics/install/)
-
-```bash
-curl -sS https://webinstall.dev/k9s | bash
-```
-
-### Angular
-
-- [angular](https://angular.io/guide/setup-local#install-the-angular-cli)
-
-```bash
-npm install -g @angular/cli
-```
-
-### Minikube
-
-- [install](https://minikube.sigs.k8s.io/docs/start/)
-- [k8s releases](https://kubernetes.io/releases/)
-
-OVH uses k8s `v1.20.2`, thus we need to mimic this in dev
-
-```bash
-# install
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
-
-# start
-minikube start --kubernetes-version=v1.20.2
-```
-
-### Kubectl
-
-- [kubectl](https://v1-18.docs.kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-```bash
-# Install version: 
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.20.11/bin/linux/amd64/kubectl
-
-# make ezxecutable
-chmod +x ./kubectl
-
-# move to bin
-sudo mv ./kubectl /usr/local/bin/kubectl
-
-# test
-kubectl version --client
-```
-
-### Ingress
-
-```bash
-minikube addons enable ingress
-```
+You should run the commands in the [install doc](./install.md).
 
 ### /etc/hosts
 
-Add the host (`bitbuyer.tom-preston.info`) to `/etc/hosts`:
+You will then need to add the host (`bitbuyer.tom-preston.info`) to `/etc/hosts`:
 
 ```bash
 # get the IP
@@ -162,11 +57,9 @@ sudo nano /etc/hosts
 # 192.168.49.2    bitbuyer.tom-preston.info
 ```
 
-## Dev
+### Run a dev server
 
-Dev is handled in tilt.
-
-To run a dev server:
+Open a bash terminal and run:
 
 ```bash
 # launch tilt
@@ -174,4 +67,7 @@ To run a dev server:
 
 # open tilt GUI
 xdg-open http://localhost:10350
+
+# open the project
+xdg-open http://bitbuyer.tom-preston.info/coins
 ```
