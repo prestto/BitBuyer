@@ -33,8 +33,7 @@ if ENV == 'DEV':
 ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = []
 if ENV == 'PROD':
-    # TODO this will change with move away from manage.py runserver
-    ALLOWED_HOSTS.append('127.0.0.1:8000')
+    ALLOWED_HOSTS.append('api.tom-preston.co.uk')
     # TODO change
     CORS_ALLOW_ALL_ORIGINS = True
 if ENV == 'DEV':
