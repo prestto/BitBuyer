@@ -17,6 +17,8 @@ spec:
       containers:
         - name: bitbuyer-api
           image: user632716/bitbuyer:latest
+          command: ["python"]
+          args: ["manage.py", "runserver", "0.0.0.0:8000"]
           ports:
             - containerPort: 8000
           resources:
