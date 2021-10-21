@@ -1,0 +1,29 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: le-crt
+spec:
+  secretName: tls-secret
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt
+  commonName: tom-preston.co.uk
+  dnsNames:
+    - tom-preston.co.uk
+    - profile.tom-preston.co.uk
+    - bitbuyer.tom-preston.co.uk
+    - api.tom-preston.co.uk
