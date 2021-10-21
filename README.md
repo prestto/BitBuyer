@@ -18,7 +18,7 @@ Let's look at news outlets then, specifically twitter.  We've taken 16M tweets a
 
 ## Overview
 
-![Technologies](./img/../docs/img/technos.png)
+![Technologies](./docs/img/technos.png)
 
 The webapp part of the project is handled in [Postgres](https://www.postgresql.org/), [django](https://www.djangoproject.com/) and [Angular](https://angular.io/).
 
