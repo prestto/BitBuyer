@@ -73,7 +73,6 @@ function run_build {
     docker build --file docker/Dockerfile-bitbuyer --tag user632716/bitbuyer:$TAG .
 
     # check the value is recognized, otherwise error quit
-    # TODO factorize this, its common to run_deploy
     if [[ $ENV != "dev" ]] && [[ $ENV != "prod" ]]; then
         cecho "YE" "$ENV was is not a recognized value, try 'dev' or 'prod'"
         cecho "YE" "Exiting process"

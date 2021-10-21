@@ -19,7 +19,6 @@ spec:
         - name: postgresql-db
           image: postgres:14.0
           volumeMounts:
-            # TODO add this to postgres-config config map
             - name: postgres-pv
               mountPath: /var/lib/postgresql/data/
           env:
