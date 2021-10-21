@@ -7,3 +7,4 @@ resources:
   - configmaps.yml
   - services.yml
   - volumes.yml
+  - front.yml

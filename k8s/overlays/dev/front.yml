@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: bitbuyer-front
-          image: user632716/bitbuyer-front:latest
+          image: user632716/bitbuyer-front:dev
           ports:
             - containerPort: 8080
           resources:
@@ -32,18 +32,3 @@ spec:
                 configMapKeyRef:
                   name: django-config
                   key: ENV
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: front-internal
-  namespace: bitbuyer
-spec:
-  type: ClusterIP
-  selector:
-    app: bitbuyer-front
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-      name: standard

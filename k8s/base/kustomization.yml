@@ -5,6 +5,5 @@ resources:
   - configmaps.yml
   - api.yml
   - postgres.yml
-  - front.yml
   - ingress.yml
   - services.yml

@@ -45,17 +45,3 @@ spec:
         - name: postgres-pv
           persistentVolumeClaim:
             claimName: postgres-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgres-internal
-  namespace: bitbuyer
-spec:
-  type: ClusterIP
-  selector:
-    app: postgresql-db
-  ports:
-    - protocol: TCP
-      port: 5432
-      targetPort: 5432

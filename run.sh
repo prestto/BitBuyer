@@ -114,8 +114,6 @@ function run_push {
 
     if [[ $TAG = "dev" ]]; then
         # dev
-        cecho "BL" "Pushing user632716/bitbuyer-front:latest..."
-        docker push user632716/bitbuyer-front:latest
         cecho "BL" "Pushing user632716/bitbuyer-front:dev..."
         docker push user632716/bitbuyer-front:dev
     else
@@ -210,6 +208,10 @@ function run_reset_mini {
     cecho "BL" "Resetting minikube"
     minikube delete
 
+    run_start_mini
+}
+
+function run_start_mini {
     cecho "BL" "Reset complete, restarting."
     minikube start --kubernetes-version=v1.20.2
 
@@ -251,6 +253,7 @@ function show_help {
     cecho "BL" "   * migrate                        - Migrate the db."
     cecho "BL" "   * makemigrations                 - Make db migrations."
     cecho "BL" "   * update_coins                   - Update current coin prices."
+    cecho "BL" "   * start_mini                     - Start minikube."
     cecho "BL" "   * reset_mini                     - Reset and restart minikube."
     cecho "BL" "   * deploy <env>                   - Deploy to cluster (default env=dev)."
     cecho "BL" "   *        dev                     - Deploy to cluster: minikube."
@@ -297,6 +300,9 @@ makemigrations)
     ;;
 update_coins)
     run_update_coins
+    ;;
+start_mini)
+    run_start_mini
     ;;
 reset_mini)
     run_reset_mini
