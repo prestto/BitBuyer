@@ -211,7 +211,7 @@ function run_reset_mini {
 }
 
 function run_start_mini {
-    cecho "BL" "Reset complete, restarting."
+    cecho "BL" "Starting Minikube."
     minikube start --kubernetes-version=v1.20.2
 
     cecho "BL" "Enabling ingress."
