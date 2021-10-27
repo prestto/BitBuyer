@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-coin-prices
+  namespace: bitbuyer
+spec:
+  schedule: "10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-coin-prices
+              image: user632716/scripts:latest
+              command:
+                - /usr/local/bin/python /app/update_current_prices.py
+              env:
+                - name: COIN_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: coin-api-key
+                      key: COIN_API_KEY
+          restartPolicy: OnFailure
