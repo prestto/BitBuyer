@@ -341,11 +341,6 @@ class PostgresConnection(DatabaseConnection):
         # Remove conflict cols if present in cols
         conflict_cols = [col for col in columns if col not in on_conflict_names]
 
-        # strip uuid in certain cases
-        if table not in ['source_mappings', 'source_suppliers_classes', 'source_materials_classes', 'source_system_code_perms']:
-            if 'uuid' in conflict_cols:
-                conflict_cols.remove('uuid')
-
         # create the conflict SET section of the statement
         conflict_logic = ', '.join(["{0}=excluded.{0}".format(c) for c in conflict_cols])
 

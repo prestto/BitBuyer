@@ -6,10 +6,11 @@ firectly from an api.
 """
 from modules.db import PostgresConnection
 
+
 def update():
     query = """
         INSERT INTO current_prices ( coin_id, rate_open, rate_close, time_period_start, time_period_end)
-                select 
+                select
                     a.coin_id,
                     a.rate_open,
                     a.rate_close,
@@ -20,7 +21,7 @@ def update():
                     from coin_prices cp
                 ) as a
                 where a.rnk = 1
-        on conflict (coin_id) 
+        on conflict (coin_id)
         do update set
             rate_open=excluded.rate_open,
             rate_close=excluded.rate_close,
@@ -34,9 +35,11 @@ def update():
 
     print(f'Finished, {rows} rows impacted.')
 
+
 def main():
     # update the current_prices table
     update()
+
 
 if __name__ == "__main__":
     main()
