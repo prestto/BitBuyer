@@ -3,3 +3,4 @@ test.ipynb
 *.pyc
 node_modules
 secrets.prod.yml
+log/

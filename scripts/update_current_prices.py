@@ -4,7 +4,8 @@ Update the table current_prices
 This is currently done from the table coin_prices, however it would be better to periodically query this
 firectly from an api.
 """
-from modules.db import PostgresConnection
+from utils.base_logger import logger
+from utils.db import PostgresConnection
 
 
 def update():
@@ -29,11 +30,11 @@ def update():
             time_period_end=excluded.time_period_end;
     """
 
-    print('Executing update')
+    logger.info('Executing update')
     with PostgresConnection() as pg:
         rows = pg.execute(query)
 
-    print(f'Finished, {rows} rows impacted.')
+    logger.info(f'Finished, {rows} rows impacted.')
 
 
 def main():

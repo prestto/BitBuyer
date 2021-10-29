@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 import time
 from pathlib import Path
@@ -10,7 +9,7 @@ import pandas as pd
 import psycopg2
 from psycopg2.extras import execute_values
 
-logger = logging.getLogger(__name__)
+from utils.base_logger import logger
 
 DB_SERVER = {
     "hostname": os.environ.get('POSTGRES_HOST', '172.26.0.2'),
@@ -26,12 +25,12 @@ Intended use:
 from utils.db import PostgresConnection
 
 with PostgresConnection() as pg:
-    pg.execute('SELECT * FROM source_suppliers')
+    pg.execute('SELECT * FROM person')
 
 --- or ---
 
 pg = PostgresConnection()
-pg.execute('SELECT * FROM source_suppliers')
+pg.execute('SELECT * FROM person')
 """
 
 

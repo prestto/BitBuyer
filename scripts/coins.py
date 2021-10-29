@@ -11,7 +11,9 @@ from typing import Tuple
 
 import requests
 from bs4 import BeautifulSoup
-from modules.db import PostgresConnection
+
+from utils.base_logger import logger
+from utils.db import PostgresConnection
 
 COL_ORDER = [
     'id',
@@ -104,11 +106,11 @@ def main():
     # we could use selenium to combat this... but it's a poc, and
     # time is of the essence
     if DUMP.exists():
-        print('Found dump, going from dump')
+        logger.info('Found dump, going from dump')
         with open(DUMP, 'r') as f:
             html = f.read()
     else:
-        print('No dump, scraping')
+        logger.info('No dump, scraping')
         r = requests.get(base_url)
         html = r.text
 
@@ -119,7 +121,7 @@ def main():
         # init the coin parser
         coin_parser = CoinParser(coin_soup)
 
-        print(f'Parsing: {coin_parser.get_name()}')
+        logger.info(f'Parsing: {coin_parser.get_name()}')
         # get details ready to insert to db
         coin = coin_parser.get_dict()
 
