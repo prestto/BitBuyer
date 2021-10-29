@@ -4,7 +4,7 @@ metadata:
   name: coin-prices
   namespace: bitbuyer
 spec:
-  schedule: "0 * * * *"
+  schedule: "* * * * *"
   jobTemplate:
     spec:
       template:
@@ -12,12 +12,37 @@ spec:
           containers:
             - name: coin-prices
               image: user632716/scripts:latest
-              command:
-                - /usr/local/bin/python /app/coin_prices.py
+              command: ["/usr/local/bin/python"]
+              args: ["/app/scripts/coin_prices.py"]
               env:
                 - name: COIN_API_KEY
                   valueFrom:
                     secretKeyRef:
                       name: coin-api-key
                       key: COIN_API_KEY
+
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-auth
+                      key: POSTGRES_PASSWORD
+
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-auth
+                      key: POSTGRES_USER
+
+                - name: POSTGRES_HOST
+                  valueFrom:
+                    configMapKeyRef:
+                      name: postgres-config
+                      key: POSTGRES_HOST
+
+                - name: POSTGRES_PORT
+                  valueFrom:
+                    configMapKeyRef:
+                      name: postgres-config
+                      key: POSTGRES_PORT
+
           restartPolicy: OnFailure
