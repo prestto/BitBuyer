@@ -4,7 +4,7 @@ metadata:
   name: coin-prices
   namespace: bitbuyer
 spec:
-  schedule: "* * * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       template:
