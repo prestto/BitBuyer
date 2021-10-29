@@ -45,4 +45,10 @@ spec:
                       name: postgres-config
                       key: POSTGRES_PORT
 
+                - name: ENV
+                  valueFrom:
+                    configMapKeyRef:
+                      name: django-config
+                      key: ENV
+
           restartPolicy: OnFailure

@@ -13,6 +13,11 @@ from utils.base_logger import logger
 Then use logger:
 logger.info('Hello, log!)
 """
+import os
+
+LEVEL = 'INFO'
+if os.environ.get('ENV', 'DEV') == 'DEV':
+    LEVEL = 'DEBUG'
 
 LOGGING = {
     'version': 1,
@@ -33,7 +38,6 @@ LOGGING = {
             'formatter': 'simple'
         },
         'file': {
-            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': './log/scripts.log',
             'formatter': 'verbose'
@@ -46,7 +50,7 @@ LOGGING = {
     'loggers': {
         'scripts': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': LEVEL,
             'propagate': False,
         },
     },
