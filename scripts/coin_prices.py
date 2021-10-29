@@ -1,3 +1,4 @@
+#!/usr/local/bin/python
 """
 Run api calls for coins
 
@@ -8,19 +9,20 @@ To run:
 """
 import json
 import os
-from datetime import datetime, timedelta, timezone, time
+from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
 from sys import exit
 from typing import List, Tuple
 
 import requests
 
-from modules.db import PostgresConnection
+from utils.base_logger import logger
+from utils.db import PostgresConnection
 
 COIN_API_KEY = os.environ.get('COIN_API_KEY', None)
 
 if not COIN_API_KEY:
-    print('Env variable COIN_API_KEY not found.')
+    logger.error('Env variable COIN_API_KEY not found.')
     exit(1)
 
 
@@ -58,10 +60,12 @@ class RequestFactory:
         else:
             return dt.strftime(self.time_format)
 
-    def query(self, abbreviation: str, time_start: datetime = datetime.fromisoformat("2016-01-01T00:00:00"), time_end: datetime = datetime.now()):
+    def query(self, abbreviation: str, time_start: datetime = datetime.fromisoformat("2016-01-01T00:00:00"),
+              time_end: datetime = datetime.now()):
         time_start = self.format_datetime(time_start, 'start')
         time_end = self.format_datetime(time_end, 'end')
-        print(f'Requesting: {abbreviation}, {time_start}, {time_end}, {self.currency}, {self.period}, {self.limit}')
+        logger.info(
+            f'Requesting: {abbreviation}, {time_start}, {time_end}, {self.currency}, {self.period}, {self.limit}')
         r = self.get_request(abbreviation, time_start, time_end)
         return requests.get(r, headers=self.get_header())
 
@@ -192,7 +196,7 @@ def main():
     for coin_to_process in coins_to_process:
 
         while True:
-            print(f'Processing {coin_to_process}...')
+            logger.info(f'Processing {coin_to_process}...')
             # get the existing history of the coin
             history = ExistingHistory(coin_to_process)
 
@@ -201,30 +205,30 @@ def main():
 
             # if the most recent results aren't older than 1 day, continue
             if history.end and history.end > datetime.now(tz=timezone.utc) - timedelta(days=1):
-                print(f'History.end = {history.end} for {coin_to_process} moving onto next coin.')
+                logger.info(f'History.end = {history.end} for {coin_to_process} moving onto next coin.')
                 break
 
             if history.end:
                 # query the coinapi endpoint to get results since last present result
-                print(f'History present from {history.start} to {history.end}')
+                logger.info(f'History present from {history.start} to {history.end}')
                 result = RequestFactory().query(coin_to_process, time_start=history.end)
             else:
                 # get results since default start time
-                print('No history found')
+                logger.info('No history found')
                 result = RequestFactory().query(coin_to_process)
 
             # check that status is good
             if result.status_code == 200:
-                print('Request status: 200')
+                logger.info('Request status: 200')
                 # format the list
                 results_processor = ResultsProcessor(coin.id, result.json())
                 results_processor.parse_list()
-                print(f'Formatted {len(results_processor.parsed_results)} results')
+                logger.info(f'Formatted {len(results_processor.parsed_results)} results')
 
                 results_processor.insert_results_db()
-                print(f'Inserted {results_processor.rows_inserted} rows.')
+                logger.info(f'Inserted {results_processor.rows_inserted} rows.')
             else:
-                print(f'Request failed with status: {result.status_code} message: {result.text}')
+                logger.info(f'Request failed with status: {result.status_code} message: {result.text}')
                 exit(1)
 
 

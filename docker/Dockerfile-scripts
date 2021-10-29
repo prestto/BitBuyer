@@ -1,0 +1,9 @@
+FROM python:slim-buster
+
+WORKDIR /app
+
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+
+ADD ./scripts ./scripts
+RUN mkdir ./log

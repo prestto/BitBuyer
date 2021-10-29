@@ -4,11 +4,12 @@ Create tables for the tweets and prices
 
 from pathlib import Path
 
-from modules.db import PostgresConnection
+from utils.base_logger import logger
+from utils.db import PostgresConnection
 
 
 def create_tables():
-    print('Creating table: twitter_users')
+    logger.info('Creating table: twitter_users')
     query = """
         create table if not exists twitter_users
         (
@@ -21,7 +22,7 @@ def create_tables():
     with PostgresConnection() as pg:
         pg.execute(query)
 
-    print('Creating table: tweets')
+    logger.info('Creating table: tweets')
     query = """
         create table if not exists tweets
         (
@@ -39,7 +40,7 @@ def create_tables():
     with PostgresConnection() as pg:
         pg.execute(query)
 
-    print('Creating table: tweet_sentiment')
+    logger.info('Creating table: tweet_sentiment')
     query = """
         create table if not exists tweet_sentiment
         (
@@ -58,7 +59,7 @@ def create_tables():
     with PostgresConnection() as pg:
         pg.execute(query)
 
-    print('Creating table: coins')
+    logger.info('Creating table: coins')
     query = """
         create table if not exists coins
         (
@@ -72,7 +73,7 @@ def create_tables():
     with PostgresConnection() as pg:
         pg.execute(query)
 
-    print('Creating table: coin_prices')
+    logger.info('Creating table: coin_prices')
     query = """
         create table if not exists coin_prices
         (
@@ -97,13 +98,13 @@ def create_tables():
 
 
 def seed_tables():
-    print('Seeding table: coins')
+    logger.info('Seeding table: coins')
     with PostgresConnection() as pg:
         pg.copy_from(Path('./resources/coins.tsv'), 'coins')
-    print('Seeding table: coin_prices')
+    logger.info('Seeding table: coin_prices')
     with PostgresConnection() as pg:
-        pg.copy_from(Path('./resources/coin_prices.tsv'), 'coin_prices', ['coin_id', 'rate_close', 'rate_high', 'rate_low', 'rate_open', 'time_close', 'time_open', 'time_period_end', 'time_period_start'])
-    
+        pg.copy_from(Path('./resources/coin_prices.tsv'), 'coin_prices',
+                     ['coin_id', 'rate_close', 'rate_high', 'rate_low', 'rate_open', 'time_close', 'time_open', 'time_period_end', 'time_period_start'])
 
 
 def main():

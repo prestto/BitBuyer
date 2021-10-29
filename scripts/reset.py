@@ -2,8 +2,8 @@
 Truncate all schemas
 """
 
-from modules.db import PostgresConnection
-
+from utils.base_logger import logger
+from utils.db import PostgresConnection
 
 
 def main():
@@ -13,14 +13,14 @@ def main():
     ]
 
     for schema in schemas:
-        print(f'Dropping schema: {schema}')
-        with  PostgresConnection() as pg:
+        logger.info(f'Dropping schema: {schema}')
+        with PostgresConnection() as pg:
             pg.execute(f"DROP SCHEMA {schema} CASCADE;")
-        
-        print(f'Recreating schema: {schema}')
-        with  PostgresConnection() as pg:
+
+        logger.info(f'Recreating schema: {schema}')
+        with PostgresConnection() as pg:
             pg.execute(f"CREATE SCHEMA {schema};")
-        
+
 
 if __name__ == "__main__":
     main()
