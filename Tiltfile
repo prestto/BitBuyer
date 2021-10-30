@@ -4,6 +4,7 @@ k8s_yaml(kustomize('./k8s/overlays/dev'))
 # run app
 k8s_resource('bitbuyer-api', port_forwards=8000)
 k8s_resource('postgresql-db')
+k8s_resource('bitbuyer-front', port_forwards=8080)
 
 docker_build('user632716/bitbuyer:latest', '.', dockerfile='./docker/Dockerfile-bitbuyer', live_update=[
     sync('.', '/app'),
@@ -12,6 +13,13 @@ docker_build('user632716/bitbuyer:latest', '.', dockerfile='./docker/Dockerfile-
     # if all that changed was start-time.txt, make sure the server
     # reloads so that it will reflect the new startup time
     run('touch /app/app.py', trigger='./start-time.txt'),
+])
+
+docker_build('user632716/bitbuyer-front:dev', '.', dockerfile='./docker/Dockerfile-bitbuyer-front', live_update=[
+    # when package.json changes, we need to do a full build
+    fall_back_on(['package.json', 'package-lock.json']),
+    # Map the local source code into the container under /src
+    sync('./front', '/app'),
 ])
 
 print('Setting up seed script')
