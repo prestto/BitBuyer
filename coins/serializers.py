@@ -51,6 +51,6 @@ class CoinDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=None)
     abbreviation = serializers.CharField(max_length=None)
-    # icon = serializers.CharField(max_length=None)
+    icon = serializers.CharField(max_length=None)
     description = serializers.CharField(max_length=None)
     coinprices_set = ThirtyDayPricePoint(many=True, read_only=True)
