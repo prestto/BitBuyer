@@ -19,7 +19,7 @@ export class DetailComponent implements OnInit {
   ) {
     this.activatedRoute.paramMap.subscribe(params => {
       console.log(params)
-      this.coinAbbreviation = params.get('abbreviation');
+      this.coinAbbreviation = params.get('coinAbbreviation');
       this.coin = this.coinService.getCoinDetail(this.coinAbbreviation)
         .subscribe(
           coin => this.coin = coin,
