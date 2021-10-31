@@ -26,4 +26,10 @@ export class CoinsService {
       .set('content-type', 'application/json');
     return this._http.get<CoinResponse>(`${environment.apiUrl}/coins/`, { 'headers': headers })
   }
+
+  getCoinDetail(coinId: number): Observable<Coin> {
+    const headers = new HttpHeaders()
+      .set('content-type', 'application/json');
+    return this._http.get<Coin>(`${environment.apiUrl}/coins/${coinId}`, { 'headers': headers })
+  }
 }

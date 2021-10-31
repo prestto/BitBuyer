@@ -5,10 +5,11 @@ import { TableComponent } from './table/table.component';
 import { MatTableModule } from '@angular/material/table';
 import { ChartsModule } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
+  imports: [SharedModule, MatTableModule, ChartsModule, CommonModule, RouterModule],
   declarations: [ListComponent, TableComponent],
-  imports: [SharedModule, MatTableModule, ChartsModule, CommonModule]
 })
 export class ListModule { }

@@ -13,6 +13,7 @@ class CoinViewSet(mixins.RetrieveModelMixin,
     pagination_class = StandardResultsSetPagination
     serializer_class = CoinListSerializer
     ordering = ['id']
+    lookup_field = 'abbreviation'
 
     def get_serializer_class(self):
         if self.action == 'list':
