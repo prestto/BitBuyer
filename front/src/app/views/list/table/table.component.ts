@@ -135,6 +135,7 @@ export class TableComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    // get coin info
     this.service.getCoins()
       .subscribe(
         coinResponse => {
