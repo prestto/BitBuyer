@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { Coin, CurrentPrices } from '../../../shared/services/coin.model';
+import { Coin, CurrentPrices, FormattedCurrentPrice } from '../../../shared/services/coin.model';
 import { CoinsService } from '../../../shared/services/coins.service';
 import { formatDate } from '@angular/common';
 
@@ -11,12 +11,6 @@ export interface TableChart {
   data: ChartDataSets[];
   labels: Label[];
   color: Color[];
-}
-
-export interface FormattedCurrentPrice {
-  change: string;
-  current: string;
-  date: Date;
 }
 
 function toFixed(x: any) {

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Coin, CoinResponse } from './coin.model';
+import { Coin, CoinResponse, CoinDetail } from './coin.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +27,9 @@ export class CoinsService {
     return this._http.get<CoinResponse>(`${environment.apiUrl}/coins/`, { 'headers': headers })
   }
 
-  getCoinDetail(coinId: number): Observable<Coin> {
+  getCoinDetail(coinId: number): Observable<CoinDetail> {
     const headers = new HttpHeaders()
       .set('content-type', 'application/json');
-    return this._http.get<Coin>(`${environment.apiUrl}/coins/${coinId}`, { 'headers': headers })
+    return this._http.get<CoinDetail>(`${environment.apiUrl}/coins/${coinId}`, { 'headers': headers })
   }
 }

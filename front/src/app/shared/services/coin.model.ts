@@ -29,3 +29,17 @@ export interface CoinResponse {
   previous: string;
   results: Coin[];
 }
+
+export interface CoinDetail {
+  id: number;
+  name: string;
+  abbreviation: string;
+  description: string;
+  coinprices_set: PricePoint[];
+}
+
+export interface FormattedCurrentPrice {
+  change: string;
+  current: string;
+  date: Date;
+}

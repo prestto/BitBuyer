@@ -32,7 +32,25 @@ class CoinListSerializer(serializers.Serializer):
     currentprices = CurrentPriceSerializer(read_only=True)
 
 
-class CoinDetailSerializer(serializers.ModelSerializer):
+class FilteredDetailSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        data = reversed(data.order_by('-time_period_end')[:30])
+        return super(FilteredDetailSerializer, self).to_representation(data)
+
+
+class ThirtyDayPricePoint(serializers.ModelSerializer):
+
     class Meta:
-        model = Coins
-        fields = '__all__'
+        list_serializer_class = FilteredDetailSerializer
+        model = CoinPrices
+        fields = ('time_close', 'rate_close', 'coin_id')
+
+
+class CoinDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(max_length=None)
+    abbreviation = serializers.CharField(max_length=None)
+    # icon = serializers.CharField(max_length=None)
+    description = serializers.CharField(max_length=None)
+    coinprices_set = ThirtyDayPricePoint(many=True, read_only=True)
