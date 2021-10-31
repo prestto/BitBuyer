@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Coins(models.Model):
     """
     Stores an instance of a coin, with metadata about the coin
@@ -12,6 +13,7 @@ class Coins(models.Model):
 
     class Meta:
         db_table = 'coins'
+
 
 class CoinPrices(models.Model):
     """
@@ -27,6 +29,7 @@ class CoinPrices(models.Model):
     time_open = models.DateTimeField()
     time_period_end = models.DateTimeField()
     time_period_start = models.DateTimeField()
+
     class Meta:
         db_table = 'coin_prices'
 
@@ -41,5 +44,6 @@ class CurrentPrices(models.Model):
     rate_open = models.DecimalField(max_digits=24, decimal_places=11)
     time_period_start = models.DateTimeField()
     time_period_end = models.DateTimeField()
+
     class Meta:
         db_table = 'current_prices'

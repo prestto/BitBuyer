@@ -1,0 +1,27 @@
+<app-top-bar></app-top-bar>
+<div id="page-container">
+    <section id="title-section">
+        <img class="icon" src="{{ coin.icon }}" alt="">
+        <span class="title">{{ coin.name }}</span>
+        <span class="abbreviation">({{ coin.abbreviation }} / USD)</span>
+        <span>
+            Last close: {{ coin.currentprices?.rate_close | currency }}
+        </span>
+    </section>
+
+    <section id="graph-section">
+        <div *ngIf="tableChart.labels?.length > 0" class="chart-container">
+            <canvas baseChart width="60px" height="300" [datasets]="tableChart.data" [labels]="tableChart.labels"
+                [options]="lineChartOptions" [colors]="tableChart.color" [legend]="lineChartLegend"
+                [chartType]="lineChartType" [plugins]="lineChartPlugins">
+            </canvas>
+        </div>
+    </section>
+
+    <section id="about-section">
+        <h2 id="about-title">
+            About {{ coin.name }}
+        </h2>
+        <div id="about-body" [innerHTML]="coin.description"></div>
+    </section>
+</div>

@@ -45,6 +45,15 @@
         </td>
     </ng-container>
 
+
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/coins', row.abbreviation]"
+        [class.hidden]="!(allCharts[row.abbreviation].data[0].data.length > 0)"></tr>
 </table>
+
+<!-- spinner while table loads -->
+<div id="spinner" *ngIf="isLoading"
+    style="display: flex; justify-content: center; align-items: center; background: white;">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>

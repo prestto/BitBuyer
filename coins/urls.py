@@ -1,7 +1,8 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+from coins.views import CoinViewSet
 
-from coins.views import ListCoins
 
-urlpatterns = [
-    path('', ListCoins.as_view(), name='coins-list'),
-]
+router = DefaultRouter()
+router.register(r'', CoinViewSet)
+urlpatterns = router.urls
