@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CoinsService } from '../../shared/services/coins.service';
-
 
 @Component({
   selector: 'app-detail',
@@ -15,15 +14,19 @@ export class DetailComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private coinService: CoinsService
+    private coinService: CoinsService,
+    private router: Router
   ) {
     this.activatedRoute.paramMap.subscribe(params => {
       console.log(params)
-      this.coinAbbreviation = params.get('coinAbbreviation');
+      this.coinAbbreviation = params.get('abbreviation');
       this.coin = this.coinService.getCoinDetail(this.coinAbbreviation)
         .subscribe(
           coin => this.coin = coin,
-          error => this.error = error
+          error => {
+            console.error(error)
+            this.router.navigate(['coins'])
+          }
         )
 
     })

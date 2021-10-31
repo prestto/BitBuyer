@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'coins', component: ListComponent },
   { path: 'coins/:coinAbbreviation', component: DetailComponent },
   { path: '', redirectTo: 'coins', pathMatch: 'full' },
+  { path: '**', redirectTo: 'coins' }
 ];
 
 @NgModule({
