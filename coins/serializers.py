@@ -23,10 +23,16 @@ class CurrentPriceSerializer(serializers.ModelSerializer):
         fields = ('coin_id', 'rate_open', 'rate_close', 'time_period_end')
 
 
-class CoinsSerializer(serializers.Serializer):
+class CoinListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=None)
     abbreviation = serializers.CharField(max_length=None)
     icon = serializers.CharField(max_length=None)
     coinprices_set = PricePoint(many=True, read_only=True)
     currentprices = CurrentPriceSerializer(read_only=True)
+
+
+class CoinDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coins
+        fields = '__all__'
