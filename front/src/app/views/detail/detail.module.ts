@@ -10,7 +10,7 @@ import { ChartsModule } from 'ng2-charts';
   imports: [
     CommonModule,
     SharedModule,
-    ChartsModule
+    ChartsModule,
   ]
 })
 export class DetailModule { }

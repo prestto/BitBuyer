@@ -2,18 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Coin, CoinResponse, CoinDetail } from './coin.model';
+import { Coin, CoinResponse, CoinDetail } from '../models/coin.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoinsService {
-
-  // private coinsSource = new Subject<Coin[]>();
-
   // observable
   coins$ = new Observable<Coin[]>();
-  // coins$ = []
 
   constructor(
     private _http: HttpClient

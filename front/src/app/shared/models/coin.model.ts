@@ -1,5 +1,3 @@
-import { DeclarationListEmitMode } from "@angular/compiler";
-
 export interface PricePoint {
   time_close: Date;
   rate_close: Date;
@@ -36,6 +34,7 @@ export interface CoinDetail {
   abbreviation: string;
   description: string;
   coinprices_set: PricePoint[];
+  currentprices: CurrentPrices;
 }
 
 export interface FormattedCurrentPrice {

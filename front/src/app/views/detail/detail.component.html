@@ -4,6 +4,9 @@
         <img class="icon" src="{{ coin.icon }}" alt="">
         <span class="title">{{ coin.name }}</span>
         <span class="abbreviation">({{ coin.abbreviation }} / USD)</span>
+        <span>
+            Last close: {{ coin.currentprices?.rate_close | currency }}
+        </span>
     </section>
 
     <section id="graph-section">

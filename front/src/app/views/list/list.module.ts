@@ -6,10 +6,10 @@ import { MatTableModule } from '@angular/material/table';
 import { ChartsModule } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  imports: [SharedModule, MatTableModule, ChartsModule, CommonModule, RouterModule],
+  imports: [SharedModule, MatTableModule, ChartsModule, CommonModule, RouterModule, MatProgressSpinnerModule],
   declarations: [ListComponent, TableComponent],
 })
 export class ListModule { }

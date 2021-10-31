@@ -110,5 +110,10 @@ mat-header-cell, mat-cell {
     padding-right: 2%;
 }
 
+#spinner ::ng-deep .mat-progress-spinner circle, .mat-spinner circle  {
+    stroke: #20639b;
+}
 
-
+.hidden {
+    opacity: 0.5;
+}
