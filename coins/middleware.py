@@ -1,6 +1,7 @@
 from pprint import pprint
 import json
 
+
 class DebugLogMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -14,6 +15,6 @@ class DebugLogMiddleware:
 
         # Code to be executed for each request/response after
         # the view is called.
-        pprint(json.loads(response.content.decode('utf-8')))
+        # pprint(json.loads(response.content.decode('utf-8')))
 
         return response
