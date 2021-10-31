@@ -1,5 +1,15 @@
 <app-top-bar></app-top-bar>
+<div id="page-container">
+    <h1>
+        <!-- <img class="icon" src="{{ coin.icon }}" alt=""> -->
+        <span class="title">{{ coin.name }}</span>
+        <span class="abbreviation">({{ coin.abbreviation }})</span>
+    </h1>
 
-<p>detail works!</p>
-{{ coin.id }}
-{{ coin.name }}
+    <section id="about-section">
+        <h2 id="about-title">
+            About {{ coin.name }}
+        </h2>
+        <div id="about-body" [innerHTML]="coin.description"></div>
+    </section>
+</div>
