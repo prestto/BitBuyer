@@ -157,6 +157,7 @@ function run_migrate {
     cecho "BL" "Migrating..."
     kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate
     kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate coins
+    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate articles
     cecho "BL" "Migrated."
 }
 
@@ -164,6 +165,7 @@ function run_makemigrations {
     cecho "BL" "Making migrations..."
     kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py makemigrations common
     kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py makemigrations coins
+    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py makemigrations articles
     cecho "BL" "Migrations made."
 }
 

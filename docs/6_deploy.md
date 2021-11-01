@@ -8,6 +8,7 @@
   - [Deploying angular in prod](#deploying-angular-in-prod)
     - [Dev](#dev)
     - [Prod](#prod)
+  - [Redeploy](#redeploy)
 
 There are a few stages for deployment:
 
@@ -105,3 +106,20 @@ This implies that we will need different tage for the dockerhub image repo:
   - will be an nginx image
   - contain only a fraction of the code (from `./dist`)
   - runs using `npm run build` which runs `ng build --configuration production`
+
+## Redeploy
+
+Once a new feature has been added, we need to redeploy.
+
+To do this, run:
+
+```bash
+# build the images for prod
+./run.sh build prod
+
+# push images to dockerhub
+./run.sh push prod
+
+# redeploy to prod
+./run.sh deploy prod
+```
