@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'common',
     'coins',
+    'articles',
 ]
 
 MIDDLEWARE = [

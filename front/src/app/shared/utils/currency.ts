@@ -76,7 +76,7 @@ export function formatCoinHistory(coin: Coin | CoinDetail) {
 
   // add to typed object
   let tc: TableChart = {
-    data: [{ data: points, label: 'Series A' },],
+    data: [{ data: points, label: '$' },],
     labels: labels,
     color: color
   }

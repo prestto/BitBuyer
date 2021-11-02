@@ -1,0 +1,55 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: article-aggregates
+  namespace: bitbuyer
+spec:
+  # every other hour
+  schedule: "0 */2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: article-aggregates
+              image: user632716/scripts:latest
+              command: ["/usr/local/bin/python"]
+              args: ["/app/scripts/article_aggregates.py"]
+              env:
+                - name: BEARER_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: twitter-api-key
+                      key: BEARER_TOKEN
+
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-auth
+                      key: POSTGRES_PASSWORD
+
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-auth
+                      key: POSTGRES_USER
+
+                - name: POSTGRES_HOST
+                  valueFrom:
+                    configMapKeyRef:
+                      name: postgres-config
+                      key: POSTGRES_HOST
+
+                - name: POSTGRES_PORT
+                  valueFrom:
+                    configMapKeyRef:
+                      name: postgres-config
+                      key: POSTGRES_PORT
+
+                - name: ENV
+                  valueFrom:
+                    configMapKeyRef:
+                      name: django-config
+                      key: ENV
+
+          restartPolicy: OnFailure

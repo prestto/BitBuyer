@@ -4,7 +4,6 @@ import { ChartDataSets, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { CoinsService } from '../../shared/services/coins.service';
 import { formatCoinHistory } from '../../shared/utils/currency';
-import { TableChart } from '../../shared/models/chart.model';
 
 
 @Component({
@@ -71,7 +70,8 @@ export class DetailComponent implements OnInit {
     },
     tooltips: {
       enabled: true,
-      position: "nearest"
+      position: "nearest",
+      intersect: false
 
     },
     scales: {
