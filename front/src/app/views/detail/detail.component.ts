@@ -71,7 +71,8 @@ export class DetailComponent implements OnInit {
     },
     tooltips: {
       enabled: true,
-      position: "nearest"
+      position: "nearest",
+      intersect: false
 
     },
     scales: {
