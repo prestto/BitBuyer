@@ -16,6 +16,7 @@ from typing import List
 import requests
 
 from utils.base_logger import logger
+from utils.dates import round_hour, strf_twitter
 from utils.db import PostgresConnection
 
 
@@ -42,27 +43,34 @@ class ArticleSource():
         r.headers["User-Agent"] = "v2RecentSearchPython"
         return r
 
-    def get_date_range(self):
+    def get_date_range(self, last_result_time):
         end_time = datetime.utcnow()
-        end_time = end_time.replace(minute=0, second=0, microsecond=0)
-        start_time = end_time - timedelta(days=7) + timedelta(hours=1)
+        end_time = round_hour(end_time)
+        if last_result_time:
+            # we already have data, go back only to the last result present
+            start_time = last_result_time
+        else:
+            # we go back the entire week
+            start_time = end_time - timedelta(days=7) + timedelta(hours=1)
         return start_time, end_time
 
-    def get_params(self, query):
-        start_time, end_time = self.get_date_range()
+    def get_params(self, query, last_result_time):
+        start_time, end_time = self.get_date_range(last_result_time)
         p = {
             'query': query,
-            'start_time': start_time.strftime('%Y-%m-%dT%H:%M:%SZ'),
-            'end_time': end_time.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'start_time': strf_twitter(start_time),
+            'end_time': strf_twitter(end_time),
         }
         logger.info(f'Creating query with params: {p}')
         return p
 
-    def get_response(self, query):
-        return requests.get(self.get_url(), auth=self.get_headers, params=self.get_params(query))
-
-    def format_article(self, coin_id, article):
-        return
+    def get_response(self, query, last_result_time):
+        params = self.get_params(query, last_result_time)
+        # sense check the time params before sending the request
+        if params['start_time'] >= params['end_time']:
+            logger.info(f'Skipping {query} as start: {params["start_time"]} >= end: {params["end_time"]}')
+            return None
+        return requests.get(self.get_url(), auth=self.get_headers, params=params)
 
     @staticmethod
     def parse_response(coin_id, response) -> List[Article]:
@@ -106,9 +114,18 @@ def main():
 
         sleep(0.5)
 
+        with PostgresConnection() as pg:
+            # in the case of no coin_id last_result_time will be None
+            last_result_time = pg.select_one(
+                f'select max(end_time) from article_aggregates where coin_id = {coin_id}').get('max')
+
         # Request results
         # get a twitter query string
-        response = source.get_response(query)
+        response = source.get_response(query, last_result_time)
+
+        if response is None:
+            # TODO we should refactor this, the check needs to be outside the source class
+            continue
 
         if response.status_code == 200:
             # process results
