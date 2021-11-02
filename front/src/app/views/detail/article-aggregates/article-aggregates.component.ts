@@ -87,7 +87,6 @@ export class ArticleAggregatesComponent implements OnInit {
       intersect: false,
       callbacks: {
         title: function (tooltipItem: any, data: any) {
-
           const dt = tooltipItem[0].xLabel
           return formatDate(dt, 'MMM-d H:M:S', 'en-us')
         },
