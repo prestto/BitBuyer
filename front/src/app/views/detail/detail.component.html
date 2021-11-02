@@ -9,7 +9,7 @@
         </span>
     </section>
 
-    <section id="graph-section">
+    <section id="price-history-section">
         <div *ngIf="tableChart.labels?.length > 0" class="chart-container">
             <canvas baseChart width="60px" height="300" [datasets]="tableChart.data" [labels]="tableChart.labels"
                 [options]="lineChartOptions" [colors]="tableChart.color" [legend]="lineChartLegend"
@@ -18,6 +18,9 @@
         </div>
     </section>
 
+    <section id="articles-aggregate">
+        <app-article-aggregates></app-article-aggregates>
+    </section>
     <section id="about-section">
         <h2 id="about-title">
             About {{ coin.name }}
