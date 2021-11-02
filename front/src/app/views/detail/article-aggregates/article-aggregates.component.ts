@@ -33,7 +33,7 @@ export class ArticleAggregatesComponent implements OnInit {
 
     // loop on all data points, converting dates
     for (let article of articles) {
-      labels.push(formatDate(article.end_time, 'Y-M-d', 'en-us'))
+      labels.push(article.end_time)
       points.push(article.count)
     }
 
@@ -43,8 +43,8 @@ export class ArticleAggregatesComponent implements OnInit {
       labels: labels,
       color: [
         {
-          borderColor: 'rgba(255,0,0,0.3)',
-          backgroundColor: 'rgba(255,0,0,0.3)',
+          borderColor: 'rgb(0, 110, 230,0.3)',
+          backgroundColor: 'rgb(0, 110, 230, 0.3)',
         },
       ]
     }
@@ -74,12 +74,6 @@ export class ArticleAggregatesComponent implements OnInit {
   public lineChartLabels: Label[] = this.labels;
   public lineChartLegend = true;
   public lineChartPlugins = [];
-  public lineChartColors: Color[] = [
-    {
-      borderColor: 'rgba(255,0,0,0.3)',
-      backgroundColor: 'rgba(255,0,0,0.3)',
-    },
-  ];
 
   public lineChartOptions: any = {
     responsive: true,
@@ -90,8 +84,14 @@ export class ArticleAggregatesComponent implements OnInit {
     tooltips: {
       enabled: true,
       position: "nearest",
-      intersect: false
+      intersect: false,
+      callbacks: {
+        title: function (tooltipItem: any, data: any) {
 
+          const dt = tooltipItem[0].xLabel
+          return formatDate(dt, 'MMM-d H:M:S', 'en-us')
+        },
+      }
     },
     scales: {
       y: {
@@ -102,8 +102,21 @@ export class ArticleAggregatesComponent implements OnInit {
         type: 'timeseries',
       },
       xAxes: [{
-        ticks: {
-          display: true //this will remove only the label
+        type: 'time',
+        time: {
+          unit: 'day',
+          unitStepSize: 1,
+          displayFormats: {
+            'millisecond': 'MMM DD',
+            'second': 'MMM DD',
+            'minute': 'MMM DD',
+            'hour': 'MMM DD',
+            'day': 'MMM DD',
+            'week': 'MMM DD',
+            'month': 'MMM DD',
+            'quarter': 'MMM DD',
+            'year': 'MMM DD',
+          }
         },
         gridLines: {
           display: false
@@ -114,7 +127,7 @@ export class ArticleAggregatesComponent implements OnInit {
           display: true //this will remove only the label
         },
         gridLines: {
-          display: true
+          display: false
         }
       }]
     },
