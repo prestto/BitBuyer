@@ -154,10 +154,31 @@ function run_rollout {
 }
 
 function run_migrate {
+    # default to latest
+    if [[ $1 = "" ]]; then
+        ENV="dev"
+    else
+        ENV=$1
+    fi
+
+    if [[ $ENV != "dev" ]] && [[ $ENV != "prod" ]]; then
+        cecho "YE" "$ENV only tags 'dev' or 'prod' are accepted"
+        cecho "YE" "Exiting process"
+        exit 1
+    fi
+
+    # match the cluster
+    if [[ $ENV = "dev" ]]; then
+        CLUSTER='minikube'
+    fi
+
+    if [[ $ENV = "prod" ]]; then
+        CLUSTER='kubernetes-admin@perso'
+    fi
     cecho "BL" "Migrating..."
-    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate
-    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate coins
-    kubectl exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate articles
+    kubectl --context ${CLUSTER} exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate
+    kubectl --context ${CLUSTER} exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate coins
+    kubectl --context ${CLUSTER} exec -n bitbuyer deploy/bitbuyer-api -- python manage.py migrate articles
     cecho "BL" "Migrated."
 }
 
@@ -304,7 +325,7 @@ rollout)
     run_rollout $2
     ;;
 migrate)
-    run_migrate
+    run_migrate $2
     ;;
 makemigrations)
     run_makemigrations
