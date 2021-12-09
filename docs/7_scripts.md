@@ -7,6 +7,7 @@
     - [Run Coin Prices](#run-coin-prices)
     - [Run Update Current Prices](#run-update-current-prices)
     - [Run update Article Aggregates](#run-update-article-aggregates)
+    - [Run a job manually (outside of cron)](#run-a-job-manually-outside-of-cron)
   - [Secrets](#secrets)
 
 ## Intro
@@ -61,6 +62,12 @@ To apply the job on the prod cluster:
 
 ```bash
 kubectl --context kubernetes-admin@perso -n bitbuyer apply -f k8s/other/cronjobs/article_aggregates.yml
+```
+
+### Run a job manually (outside of cron)
+
+```bash
+kubectl --context kubernetes-admin@perso -n bitbuyer create job --from=cronjob/article-aggregates article-aggregates
 ```
 
 ## Secrets

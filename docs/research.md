@@ -27,3 +27,8 @@ SELECT setval('coin_prices_id_seq', (SELECT MAX(id) FROM coin_prices)+1);
 ## Setting up a PV on OVH
 
 - [how-to](https://docs.ovh.com/gb/en/kubernetes/setting-up-a-persistent-volume/)
+
+## Scholary articles
+
+https://scholar.smu.edu/cgi/viewcontent.cgi?article=1039&context=datasciencereview
+https://towardsdatascience.com/google-trends-api-for-python-a84bc25db88f
